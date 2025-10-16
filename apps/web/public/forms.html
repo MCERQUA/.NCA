@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Netlify Forms Detection</title>
+</head>
+<body style="display: none;">
+  <!-- This file helps Netlify detect forms during build -->
+
+  <!-- Contact Form -->
+  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="contact" />
+    <p class="hidden">
+      <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+    </p>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <input type="text" name="subject" />
+    <textarea name="message"></textarea>
+  </form>
+
+  <!-- Contractor Signup Form -->
+  <form name="contractor-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="contractor-signup" />
+    <p class="hidden">
+      <label>Don't fill this out: <input name="bot-field" /></label>
+    </p>
+    <input type="text" name="company-name" />
+    <input type="text" name="contact-name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <input type="text" name="city" />
+    <input type="text" name="state" />
+    <select name="services">
+      <option value="roofing">Roofing</option>
+      <option value="electrical">Electrical</option>
+      <option value="plumbing">Plumbing</option>
+      <option value="hvac">HVAC</option>
+      <option value="painting">Painting</option>
+      <option value="remodeling">Remodeling</option>
+      <option value="landscaping">Landscaping</option>
+      <option value="flooring">Flooring</option>
+      <option value="other">Other</option>
+    </select>
+    <select name="plan">
+      <option value="free">Free</option>
+      <option value="pro">Pro</option>
+      <option value="verified">Verified</option>
+    </select>
+    <textarea name="comments"></textarea>
+  </form>
+</body>
+</html>

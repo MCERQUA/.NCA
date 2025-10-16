@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Card, CardContent } from '../components/ui/Card';
+---
+
+<BaseLayout
+  title="Thank You - National Contractor Association"
+  description="Thank you for contacting us. We'll get back to you soon."
+>
+  <main class="min-h-screen bg-gray-50 py-20 px-4">
+    <div class="container mx-auto max-w-2xl">
+      <Card className="text-center">
+        <CardContent className="p-12">
+          <div class="mb-6">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+              <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+          </div>
+
+          <h1 class="text-3xl font-heading font-bold text-charcoal mb-4">
+            Thank You!
+          </h1>
+
+          <p class="text-lg text-slate mb-8">
+            We've received your message and will get back to you as soon as possible.
+            Our team typically responds within 1-2 business days.
+          </p>
+
+          <div class="space-y-4">
+            <a
+              href="/"
+              class="inline-block bg-primary text-white font-semibold py-3 px-8 rounded-lg hover:bg-primary-600 transition-colors"
+            >
+              Return to Home
+            </a>
+
+            <div class="pt-4">
+              <a href="/contractors" class="text-primary hover:underline">
+                Browse Contractors
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-12 pt-8 border-t border-gray-200">
+            <p class="text-sm text-slate">
+              Need immediate assistance? Call us at <strong>(555) 123-4567</strong>
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  </main>
+</BaseLayout>

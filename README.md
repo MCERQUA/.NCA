@@ -1,0 +1,167 @@
+# National Contractor Association (NCA)
+
+Modern contractor directory platform built with Astro + React, designed for optimal SEO, performance, and user experience.
+
+## Tech Stack
+
+- **Framework**: Astro 4 + React 18
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Database**: PostgreSQL + Prisma ORM
+- **Search**: Typesense/Meilisearch
+- **Maps**: Mapbox GL
+- **Auth**: Clerk
+- **Payments**: Stripe
+- **Storage**: S3-compatible (AWS S3 / Cloudflare R2)
+- **Hosting**: Vercel (preferred) or Netlify
+
+## Project Structure
+
+```
+NCA/
+├── apps/
+│   └── web/                 # Main Astro application
+│       ├── src/
+│       │   ├── components/  # React & Astro components
+│       │   ├── layouts/     # Page layouts
+│       │   ├── pages/       # File-based routing
+│       │   ├── lib/         # Utilities
+│       │   └── styles/      # Global styles
+│       └── public/          # Static assets
+├── packages/
+│   ├── database/            # Prisma schema & client
+│   ├── ui/                  # Shared UI components
+│   └── config/              # Shared configurations
+└── package.json             # Root package.json
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 18
+- pnpm >= 8
+- PostgreSQL database
+
+### Installation
+
+1. Clone the repository:
+```bash
+cd NCA
+```
+
+2. Install dependencies:
+```bash
+pnpm install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and add your configuration values.
+
+4. Set up the database:
+```bash
+cd packages/database
+pnpm db:push
+```
+
+5. Start the development server:
+```bash
+pnpm dev
+```
+
+The application will be available at `http://localhost:4321`
+
+## Development
+
+### Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm preview` - Preview production build
+- `pnpm lint` - Run linter
+- `pnpm format` - Format code with Prettier
+- `pnpm typecheck` - Run TypeScript type checking
+
+### Database Commands
+
+```bash
+cd packages/database
+
+# Generate Prisma Client
+pnpm db:generate
+
+# Push schema changes to database
+pnpm db:push
+
+# Create and run migrations
+pnpm db:migrate
+
+# Open Prisma Studio
+pnpm db:studio
+```
+
+## Key Features
+
+- **Contractor Directory**: Search and filter contractors by trade, location, certifications
+- **Company Profiles**: SEO-optimized pages with structured data, reviews, portfolios
+- **Interactive Map**: Mapbox integration with clustering and geo-search
+- **Membership System**: Free, Pro, and Verified tiers with Stripe subscriptions
+- **Verification Workflow**: Admin review of licenses and credentials
+- **Lead Management**: Quote request forms with CRM integration
+- **Resources/CMS**: Editorial content for SEO and user education
+- **Admin Dashboard**: User, company, and content moderation
+
+## SEO Features
+
+- Static site generation (SSG) with ISR
+- JSON-LD structured data (LocalBusiness, Service, Review schemas)
+- Dynamic meta tags and Open Graph images
+- Optimized Core Web Vitals (LCP <2.5s, CLS <0.1, INP <200ms)
+- Automatic sitemap generation
+- Semantic URL structure
+
+## Performance Targets
+
+- Lighthouse Performance: ≥90
+- Lighthouse Accessibility: ≥95
+- Lighthouse SEO: 100
+- Time to Interactive: <1.8s
+- TTFB: <200ms
+
+## Deployment
+
+### Vercel (Recommended)
+
+```bash
+# Install Vercel CLI
+pnpm add -g vercel
+
+# Deploy
+vercel
+```
+
+### Environment Variables
+
+Make sure to set all required environment variables in your deployment platform:
+- Database connection string
+- API keys (Mapbox, Stripe, Clerk, etc.)
+- Storage credentials
+- Email service credentials
+
+## Contributing
+
+1. Create a feature branch
+2. Make your changes
+3. Run tests and linting
+4. Submit a pull request
+
+## License
+
+Proprietary - All rights reserved
+
+## Support
+
+For questions or issues, contact the development team.

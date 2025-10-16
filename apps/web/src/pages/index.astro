@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Button } from '../components/ui/Button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
+---
+
+<BaseLayout>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-b from-white to-gray-50 py-20 px-4">
+      <div class="container mx-auto max-w-6xl">
+        <div class="text-center space-y-6">
+          <h1 class="text-5xl md:text-6xl font-heading font-bold text-charcoal">
+            Find <span class="text-primary">Trusted Contractors</span>
+            <br />Near You
+          </h1>
+          <p class="text-xl text-slate max-w-2xl mx-auto">
+            Connect with verified, licensed contractors across the nation. Browse by trade, location, and specialty.
+          </p>
+
+          <!-- Search Bar -->
+          <div class="max-w-3xl mx-auto mt-8">
+            <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-2xl shadow-lg">
+              <input
+                type="text"
+                placeholder="What service do you need?"
+                class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <input
+                type="text"
+                placeholder="City, State, or ZIP"
+                class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <Button client:load size="lg" className="md:w-auto w-full">
+                Search Contractors
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Service Categories -->
+    <section class="py-16 px-4">
+      <div class="container mx-auto max-w-6xl">
+        <h2 class="text-3xl font-heading font-bold text-center mb-12">
+          Popular Services
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {['Roofing', 'Electrical', 'Plumbing', 'HVAC', 'Painting', 'Remodeling', 'Landscaping', 'Flooring'].map((service) => (
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardContent className="p-6 text-center">
+                <h3 class="font-semibold text-lg">{service}</h3>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <section class="py-16 px-4 bg-gray-50">
+      <div class="container mx-auto max-w-6xl">
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="text-4xl font-bold text-primary mb-2">10,000+</div>
+            <div class="text-slate">Verified Contractors</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-primary mb-2">50+</div>
+            <div class="text-slate">Service Categories</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-primary mb-2">4.8★</div>
+            <div class="text-slate">Average Rating</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-4 bg-charcoal text-white">
+      <div class="container mx-auto max-w-4xl text-center space-y-6">
+        <h2 class="text-4xl font-heading font-bold">
+          Are You a Contractor?
+        </h2>
+        <p class="text-xl text-gray-300">
+          Join our network and connect with customers looking for your services.
+        </p>
+        <div class="flex gap-4 justify-center flex-wrap">
+          <Button client:load size="lg" variant="default">
+            Join Now
+          </Button>
+          <Button client:load size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-charcoal">
+            Learn More
+          </Button>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

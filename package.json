@@ -1,0 +1,24 @@
+{
+  "name": "national-contractor-association",
+  "version": "1.0.0",
+  "private": true,
+  "description": "National Contractor Association - Modern rebuild with Astro + React",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "preview": "pnpm --filter web preview",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,astro}\"",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "prettier": "^3.1.0",
+    "prettier-plugin-astro": "^0.12.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
