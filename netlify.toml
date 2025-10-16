@@ -1,7 +1,7 @@
 [build]
   base = "apps/web"
   command = "pnpm build"
-  publish = "apps/web/dist"
+  publish = "dist"
 
 # Environment variables (set these in Netlify UI)
 [build.environment]
@@ -43,16 +43,6 @@
   for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-
-# Form handling
-[forms]
-  # Spam filtering
-  [forms.settings]
-    spam_action = "challenge"
-
-# Plugin for form submissions
-[[plugins]]
-  package = "@netlify/plugin-forms"
 
 # Asset optimization
 [build.processing]
