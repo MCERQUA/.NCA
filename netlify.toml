@@ -9,6 +9,7 @@
   NPM_FLAGS = "--prefix=/dev/null"
   # Disable secrets scanning for public Google Maps API key
   SECRETS_SCAN_OMIT_KEYS = "PUBLIC_GOOGLE_MAPS_API_KEY"
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
 
 # Redirects and rewrites
 [[redirects]]
