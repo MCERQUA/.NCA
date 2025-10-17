@@ -5,12 +5,15 @@ import Footer from '../components/Footer.astro';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { ContractorCard } from '../components/ContractorCard';
+import { ContractorMap } from '../components/ContractorMap';
 import { mockContractors } from '../data/contractors';
 
 // Get featured contractors (top 3 by rating)
 const featuredContractors = mockContractors
   .sort((a, b) => b.rating - a.rating)
   .slice(0, 3);
+
+const GOOGLE_MAPS_API_KEY = 'AIzaSyBdhKFm1TR8q8fdBE1OXSKAwW6i12hXDr8';
 ---
 
 <BaseLayout>
@@ -116,8 +119,23 @@ const featuredContractors = mockContractors
       </div>
     </section>
 
-    <!-- Trust Indicators -->
+    <!-- Contractor Map -->
     <section class="py-16 px-4 bg-gray-50">
+      <div class="container mx-auto max-w-6xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-heading font-bold text-charcoal mb-4">
+            Find Contractors Near You
+          </h2>
+          <p class="text-xl text-slate">
+            Explore our network of verified contractors across the nation
+          </p>
+        </div>
+        <ContractorMap client:load contractors={mockContractors} apiKey={GOOGLE_MAPS_API_KEY} />
+      </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <section class="py-16 px-4 bg-white">
       <div class="container mx-auto max-w-6xl">
         <div class="grid md:grid-cols-3 gap-8">
           <div class="text-center">

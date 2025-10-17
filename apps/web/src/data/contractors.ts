@@ -4,6 +4,10 @@ export interface Contractor {
   category: string;
   description: string;
   location: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   rating: number;
   reviewCount: number;
   imageUrl?: string;
@@ -22,6 +26,7 @@ export const mockContractors: Contractor[] = [
     category: 'Roofing',
     description: 'Professional roofing services including installation, repair, and maintenance. Specializing in residential and commercial properties with 20+ years of experience.',
     location: 'Los Angeles, CA',
+    coordinates: { lat: 34.0522, lng: -118.2437 },
     rating: 4.9,
     reviewCount: 127,
     verified: true,
@@ -37,6 +42,7 @@ export const mockContractors: Contractor[] = [
     category: 'Electrical',
     description: 'Licensed electricians providing residential and commercial electrical services. From panel upgrades to complete rewiring, we handle it all.',
     location: 'Chicago, IL',
+    coordinates: { lat: 41.8781, lng: -87.6298 },
     rating: 4.8,
     reviewCount: 94,
     verified: true,
@@ -51,6 +57,7 @@ export const mockContractors: Contractor[] = [
     category: 'Plumbing',
     description: 'Full-service plumbing company offering installation, repair, and emergency services. Available 24/7 for your plumbing emergencies.',
     location: 'Houston, TX',
+    coordinates: { lat: 29.7604, lng: -95.3698 },
     rating: 4.7,
     reviewCount: 156,
     verified: true,
@@ -65,6 +72,7 @@ export const mockContractors: Contractor[] = [
     category: 'HVAC',
     description: 'Expert HVAC installation, maintenance, and repair services. Keeping your home comfortable year-round with energy-efficient solutions.',
     location: 'Phoenix, AZ',
+    coordinates: { lat: 33.4484, lng: -112.0740 },
     rating: 4.9,
     reviewCount: 203,
     verified: true,
@@ -79,6 +87,7 @@ export const mockContractors: Contractor[] = [
     category: 'Painting',
     description: 'Interior and exterior painting services for residential and commercial properties. Quality workmanship with attention to detail.',
     location: 'Miami, FL',
+    coordinates: { lat: 25.7617, lng: -80.1918 },
     rating: 4.6,
     reviewCount: 78,
     verified: true,
@@ -93,6 +102,7 @@ export const mockContractors: Contractor[] = [
     category: 'Remodeling',
     description: 'Complete home remodeling services including kitchens, bathrooms, and whole-house renovations. Turn your vision into reality.',
     location: 'Seattle, WA',
+    coordinates: { lat: 47.6062, lng: -122.3321 },
     rating: 4.8,
     reviewCount: 112,
     verified: true,
@@ -107,6 +117,7 @@ export const mockContractors: Contractor[] = [
     category: 'Landscaping',
     description: 'Professional landscaping and lawn care services. Design, installation, and maintenance to create your perfect outdoor space.',
     location: 'Denver, CO',
+    coordinates: { lat: 39.7392, lng: -104.9903 },
     rating: 4.7,
     reviewCount: 89,
     verified: true,
@@ -121,6 +132,7 @@ export const mockContractors: Contractor[] = [
     category: 'Flooring',
     description: 'Expert flooring installation for hardwood, tile, laminate, and carpet. Quality materials and professional installation guaranteed.',
     location: 'Atlanta, GA',
+    coordinates: { lat: 33.7490, lng: -84.3880 },
     rating: 4.9,
     reviewCount: 145,
     verified: true,
@@ -135,6 +147,7 @@ export const mockContractors: Contractor[] = [
     category: 'General Contractor',
     description: 'General contracting services for residential and commercial projects. From new construction to renovations, we do it all.',
     location: 'Boston, MA',
+    coordinates: { lat: 42.3601, lng: -71.0589 },
     rating: 4.8,
     reviewCount: 167,
     verified: true,
@@ -149,6 +162,7 @@ export const mockContractors: Contractor[] = [
     category: 'Windows & Doors',
     description: 'Replacement windows and door installation. Energy-efficient products with professional installation for improved home comfort.',
     location: 'San Diego, CA',
+    coordinates: { lat: 32.7157, lng: -117.1611 },
     rating: 4.7,
     reviewCount: 98,
     verified: true,
@@ -163,6 +177,7 @@ export const mockContractors: Contractor[] = [
     category: 'Foundation',
     description: 'Foundation inspection, repair, and waterproofing services. Protecting your home\'s structural integrity with proven solutions.',
     location: 'Dallas, TX',
+    coordinates: { lat: 32.7767, lng: -96.7970 },
     rating: 4.9,
     reviewCount: 134,
     verified: true,
@@ -177,6 +192,7 @@ export const mockContractors: Contractor[] = [
     category: 'Pool Maintenance',
     description: 'Complete pool maintenance, repair, and renovation services. Keep your pool sparkling clean and running smoothly year-round.',
     location: 'Orlando, FL',
+    coordinates: { lat: 28.5383, lng: -81.3792 },
     rating: 4.6,
     reviewCount: 76,
     verified: false,
