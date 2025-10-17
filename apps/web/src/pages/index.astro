@@ -40,17 +40,17 @@ if (!GOOGLE_MAPS_API_KEY) {
       <div class="absolute inset-0 flex items-center justify-center px-4">
         <div class="container mx-auto max-w-5xl">
           <div class="text-center space-y-6 bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-12 rounded-3xl shadow-2xl">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white drop-shadow-lg">
-              Find <span class="text-blue-300">Trusted Contractors</span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-charcoal drop-shadow-lg">
+              Find <span class="text-orange-500">Trusted Contractors</span>
               <br />Near You
             </h1>
-            <p class="text-lg md:text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
+            <p class="text-lg md:text-xl text-charcoal/90 max-w-2xl mx-auto drop-shadow-md">
               Connect with verified, licensed contractors across the nation. Browse by trade, location, and specialty.
             </p>
 
             <!-- Search Bar -->
             <div class="max-w-4xl mx-auto mt-8">
-              <div class="flex flex-col md:flex-row gap-3 bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-lg">
+              <div class="flex flex-col sm:flex-row gap-3 bg-white/95 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-lg">
                 <input
                   type="text"
                   placeholder="What service do you need?"
@@ -61,9 +61,9 @@ if (!GOOGLE_MAPS_API_KEY) {
                   placeholder="City, State, or ZIP"
                   class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base"
                 />
-                <Button client:load size="lg" className="w-full md:w-auto whitespace-nowrap px-6">
-                  Search Contractors
-                </Button>
+                <button class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium text-base whitespace-nowrap">
+                  Search
+                </button>
               </div>
             </div>
           </div>
