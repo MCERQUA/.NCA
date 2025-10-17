@@ -24,20 +24,26 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
   useEffect(() => {
     if (!apiKey) {
       console.error('Google Maps API key is required');
+      setIsLoading(false);
       return;
     }
 
     // Load Google Maps script
     if (!window.google) {
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async`;
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-
-      script.onload = () => {
+      // Create callback function
+      (window as any).initGoogleMap = () => {
         initMap();
       };
+
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initGoogleMap`;
+      script.async = true;
+      script.defer = true;
+      script.onerror = () => {
+        console.error('Failed to load Google Maps script');
+        setIsLoading(false);
+      };
+      document.head.appendChild(script);
     } else {
       initMap();
     }
