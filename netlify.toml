@@ -1,7 +1,7 @@
 [build]
   base = "apps/web"
   command = "pnpm build"
-  publish = "dist"
+  # publish directory is automatically handled by @astrojs/netlify adapter
 
 # Environment variables (set these in Netlify UI)
 [build.environment]
