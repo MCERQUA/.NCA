@@ -2,6 +2,36 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL DEBUGGING PROTOCOL
+
+**WHEN SOMETHING BREAKS - READ THIS FIRST:**
+
+1. **THINK BEFORE SUGGESTING SOLUTIONS**
+   - Use `<extra_thinking>` tags to analyze the problem thoroughly
+   - The issue is almost ALWAYS in code YOU wrote, not missing environment variables
+   - Stop blaming external factors (missing env vars, Netlify config, user setup)
+
+2. **NETLIFY ENVIRONMENT VARIABLES ARE ALREADY CONFIGURED**
+   - Netlify has Neon database integration - `NETLIFY_DATABASE_URL` is auto-provided
+   - Google Maps API key is already set up in Netlify dashboard
+   - DO NOT ask the user to add environment variables unless you've verified they're actually missing
+   - If the site was working before and broke after your changes, it's YOUR CODE, not env vars
+
+3. **DEBUG PROCESS**
+   - First: Review the code YOU just changed
+   - Second: Check build logs for actual errors
+   - Third: Test locally with the same environment
+   - Last: Only then suggest external factors
+
+4. **COMMON MISTAKES TO AVOID**
+   - Making database connection optional/nullable when it shouldn't be
+   - Adding null checks that cause empty results
+   - Removing working code and replacing it with broken alternatives
+   - Switching between SSR/static modes without understanding the implications
+   - Assuming env vars are missing when they're auto-configured
+
+**If something was working and now it's not: YOUR CODE BROKE IT. FIX YOUR CODE.**
+
 ## Project Overview
 
 National Contractor Association (NCA) - A modern contractor directory platform built with Astro 4 + React 18. The project uses a monorepo structure with pnpm workspaces, designed for optimal SEO, performance, and user experience.
@@ -132,7 +162,9 @@ netlify deploy --prod # Production
 - **DO NOT** deploy to localhost (VPS is for testing only)
 - Always push changes to GitHub before deployment
 - Forms use Netlify Forms (data-netlify="true" attributes)
-- Environment variables must be set in Netlify dashboard
+- **Netlify Neon Integration**: Database connection is automatic via `NETLIFY_DATABASE_URL`
+- **Google Maps API**: Already configured in Netlify - do NOT ask user to add it
+- Environment variables are managed through Netlify's integrations and dashboard
 
 ## Current Status
 
@@ -204,4 +236,45 @@ When committing changes, follow the established pattern:
 - `PROJECT_STATUS.md`: Detailed feature status and roadmap
 - `DEPLOYMENT.md`: Complete deployment guide for GitHub + Netlify
 - `national_contractor_association_rebuild_prd_astro_react.md`: Original PRD specifications
-- google maps env is already setup in netlify
+
+## Lessons Learned (DO NOT REPEAT THESE MISTAKES)
+
+### Database Connection Pattern
+**WRONG (causes empty results):**
+```typescript
+let db: ReturnType<typeof drizzle> | null = null;
+if (connectionString) {
+  db = drizzle(client, { schema });
+}
+export { db };
+
+// Then in utils:
+export async function getAllContractors() {
+  if (!db) return []; // This breaks everything!
+  return await db.select()...
+}
+```
+
+**CORRECT (works properly):**
+```typescript
+if (!connectionString) {
+  throw new Error('DATABASE_URL environment variable is not set');
+}
+const client = postgres(connectionString);
+export const db = drizzle(client, { schema });
+
+// Then in utils:
+export async function getAllContractors() {
+  return await db.select()... // Direct query, no null checks
+}
+```
+
+**Why this matters:** Netlify provides `NETLIFY_DATABASE_URL` automatically. Making the database optional causes it to silently fail and return empty arrays during static generation, resulting in a working build but empty content.
+
+### Environment Variable Priority
+Check in this order:
+1. `process.env.NETLIFY_DATABASE_URL` (Netlify's Neon integration)
+2. `process.env.DATABASE_URL` (fallback)
+3. `import.meta.env.*` (Astro's env handling)
+
+DO NOT use `dotenv` to load from `.env` files - Netlify injects environment variables directly into `process.env`.
