@@ -11,19 +11,19 @@ import { Button } from './ui/Button';
 
     <!-- Desktop Navigation -->
     <div class="hidden md:flex items-center space-x-8">
-      <a href="/" class="text-sm font-medium text-charcoal hover:text-orange-500 transition-colors">
+      <a href="/" class="text-sm font-semibold text-gray-900 hover:text-orange-500 transition-colors drop-shadow">
         Home
       </a>
-      <a href="/directory" class="text-sm font-medium text-charcoal hover:text-orange-500 transition-colors">
+      <a href="/directory" class="text-sm font-semibold text-gray-900 hover:text-orange-500 transition-colors drop-shadow">
         Find Contractors
       </a>
-      <a href="/categories" class="text-sm font-medium text-charcoal hover:text-orange-500 transition-colors">
+      <a href="/categories" class="text-sm font-semibold text-gray-900 hover:text-orange-500 transition-colors drop-shadow">
         Categories
       </a>
-      <a href="/contact" class="text-sm font-medium text-charcoal hover:text-orange-500 transition-colors">
+      <a href="/contact" class="text-sm font-semibold text-gray-900 hover:text-orange-500 transition-colors drop-shadow">
         Contact
       </a>
-      <a href="/join" class="text-sm font-medium text-charcoal hover:text-orange-500 transition-colors">
+      <a href="/join" class="text-sm font-semibold text-gray-900 hover:text-orange-500 transition-colors drop-shadow">
         Join NCA
       </a>
     </div>
@@ -45,7 +45,7 @@ import { Button } from './ui/Button';
     <!-- Mobile Menu Button -->
     <button
       id="mobile-menu-button"
-      class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-charcoal hover:text-orange-500 hover:bg-orange-500/10 transition-colors"
+      class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-900 hover:text-orange-500 hover:bg-orange-500/10 transition-colors drop-shadow"
       aria-label="Toggle menu"
     >
       <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,26 +55,26 @@ import { Button } from './ui/Button';
   </nav>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-white/20 bg-white/10 backdrop-blur-md">
+  <div id="mobile-menu" class="hidden md:hidden border-t border-white/20 bg-white/95 backdrop-blur-md">
     <div class="px-4 py-3 space-y-1">
-      <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
+      <a href="/" class="block px-3 py-2 rounded-md text-base font-semibold text-gray-900 hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
         Home
       </a>
-      <a href="/directory" class="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
+      <a href="/directory" class="block px-3 py-2 rounded-md text-base font-semibold text-gray-900 hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
         Find Contractors
       </a>
-      <a href="/categories" class="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
+      <a href="/categories" class="block px-3 py-2 rounded-md text-base font-semibold text-gray-900 hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
         Categories
       </a>
-      <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
+      <a href="/contact" class="block px-3 py-2 rounded-md text-base font-semibold text-gray-900 hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
         Contact
       </a>
-      <a href="/join" class="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
+      <a href="/join" class="block px-3 py-2 rounded-md text-base font-semibold text-gray-900 hover:text-orange-500 hover:bg-orange-500/10 transition-colors">
         Join NCA
       </a>
       <div class="pt-4 pb-2 space-y-2">
         <a href="/signin">
-          <Button client:load variant="outline" className="w-full border-charcoal/30 text-charcoal hover:bg-orange-500/10 hover:border-orange-500">
+          <Button client:load variant="outline" className="w-full border-gray-900/30 text-gray-900 hover:bg-orange-500/10 hover:border-orange-500">
             Sign In
           </Button>
         </a>
