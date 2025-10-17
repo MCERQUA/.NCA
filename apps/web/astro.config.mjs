@@ -13,7 +13,9 @@ export default defineConfig({
     }),
   ],
   output: 'server', // SSR for dynamic pages
-  adapter: netlify(),
+  adapter: netlify({
+    edgeMiddleware: true,
+  }),
   build: {
     inlineStylesheets: 'auto',
   },
