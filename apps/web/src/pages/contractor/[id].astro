@@ -4,7 +4,15 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
-import { getContractorById } from '../../lib/db-utils';
+import { getContractorById, getAllContractors } from '../../lib/db-utils';
+
+// Generate static paths for all contractors at build time
+export async function getStaticPaths() {
+  const contractors = await getAllContractors();
+  return contractors.map((contractor) => ({
+    params: { id: contractor.id },
+  }));
+}
 
 const { id } = Astro.params;
 
