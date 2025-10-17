@@ -1,7 +1,12 @@
 [build]
   base = "apps/web"
   command = "pnpm build"
-  publish = "dist"
+  publish = "dist/client"
+
+[functions]
+  directory = "dist/server"
+  node_bundler = "esbuild"
+  included_files = ["dist/server/**"]
 
 # Environment variables (set these in Netlify UI)
 [build.environment]
