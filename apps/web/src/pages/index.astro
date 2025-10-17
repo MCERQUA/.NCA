@@ -23,34 +23,48 @@ if (!GOOGLE_MAPS_API_KEY) {
 <BaseLayout>
   <Header />
   <main class="min-h-screen">
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-b from-white to-gray-50 py-20 px-4">
-      <div class="container mx-auto max-w-6xl">
-        <div class="text-center space-y-6">
-          <h1 class="text-5xl md:text-6xl font-heading font-bold text-charcoal">
-            Find <span class="text-primary">Trusted Contractors</span>
-            <br />Near You
-          </h1>
-          <p class="text-xl text-slate max-w-2xl mx-auto">
-            Connect with verified, licensed contractors across the nation. Browse by trade, location, and specialty.
-          </p>
+    <!-- Hero Section with Full Screen Map -->
+    <section class="relative h-screen w-full">
+      <!-- Map Background -->
+      <div class="absolute inset-0 w-full h-full">
+        {GOOGLE_MAPS_API_KEY ? (
+          <ContractorMap client:load contractors={mockContractors} apiKey={GOOGLE_MAPS_API_KEY} />
+        ) : (
+          <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+            <p class="text-slate-600">Map loading...</p>
+          </div>
+        )}
+      </div>
 
-          <!-- Search Bar -->
-          <div class="max-w-3xl mx-auto mt-8">
-            <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-2xl shadow-lg">
-              <input
-                type="text"
-                placeholder="What service do you need?"
-                class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <input
-                type="text"
-                placeholder="City, State, or ZIP"
-                class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <Button client:load size="lg" className="md:w-auto w-full">
-                Search Contractors
-              </Button>
+      <!-- Overlay Content -->
+      <div class="absolute inset-0 flex items-center justify-center px-4">
+        <div class="container mx-auto max-w-6xl">
+          <div class="text-center space-y-6 bg-white/95 backdrop-blur-sm p-8 md:p-12 rounded-3xl shadow-2xl">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-charcoal">
+              Find <span class="text-primary">Trusted Contractors</span>
+              <br />Near You
+            </h1>
+            <p class="text-lg md:text-xl text-slate max-w-2xl mx-auto">
+              Connect with verified, licensed contractors across the nation. Browse by trade, location, and specialty.
+            </p>
+
+            <!-- Search Bar -->
+            <div class="max-w-3xl mx-auto mt-8">
+              <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-2xl shadow-lg">
+                <input
+                  type="text"
+                  placeholder="What service do you need?"
+                  class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <input
+                  type="text"
+                  placeholder="City, State, or ZIP"
+                  class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <Button client:load size="lg" className="md:w-auto w-full">
+                  Search Contractors
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -120,27 +134,6 @@ if (!GOOGLE_MAPS_API_KEY) {
             </Button>
           </a>
         </div>
-      </div>
-    </section>
-
-    <!-- Contractor Map -->
-    <section class="py-16 px-4 bg-gray-50">
-      <div class="container mx-auto max-w-6xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-heading font-bold text-charcoal mb-4">
-            Find Contractors Near You
-          </h2>
-          <p class="text-xl text-slate">
-            Explore our network of verified contractors across the nation
-          </p>
-        </div>
-        {GOOGLE_MAPS_API_KEY ? (
-          <ContractorMap client:load contractors={mockContractors} apiKey={GOOGLE_MAPS_API_KEY} />
-        ) : (
-          <div class="bg-white rounded-xl shadow-lg p-12 text-center">
-            <p class="text-slate-600">Map feature is currently unavailable. Please check back later.</p>
-          </div>
-        )}
       </div>
     </section>
 

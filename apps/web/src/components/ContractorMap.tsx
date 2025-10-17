@@ -155,7 +155,7 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '500px' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       {isLoading && (
         <div style={{
           position: 'absolute',
@@ -167,7 +167,6 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: '#f1f5f9',
-          borderRadius: '12px',
           zIndex: 10
         }}>
           <p style={{ color: '#64748b' }}>Loading map...</p>
@@ -175,8 +174,7 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
       )}
       <div
         ref={mapRef}
-        style={{ width: '100%', height: '500px', borderRadius: '12px' }}
-        className="shadow-lg"
+        style={{ width: '100%', height: '100%' }}
       />
     </div>
   );
