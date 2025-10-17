@@ -13,7 +13,7 @@ const featuredContractors = mockContractors
   .sort((a, b) => b.rating - a.rating)
   .slice(0, 3);
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBdhKFm1TR8q8fdBE1OXSKAwW6i12hXDr8';
+const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || import.meta.env.GOOGLE_MAPS_API_KEY;
 ---
 
 <BaseLayout>
