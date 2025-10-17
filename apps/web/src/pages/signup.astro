@@ -30,8 +30,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <div>
-                <h3 class="text-lg font-semibold text-green-900 mb-1">Profile Created Successfully!</h3>
-                <p class="text-green-800">Your contractor profile has been created and is now live on the map. <a href="/directory" class="underline font-medium">View directory</a></p>
+                <h3 class="text-lg font-semibold text-green-900 mb-1">Application Submitted Successfully!</h3>
+                <p class="text-green-800">Thank you for submitting your contractor profile. Our team will review your application and activate your profile within 24 hours. You'll receive an email once approved.</p>
               </div>
             </div>
           </CardContent>
@@ -63,13 +63,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
         </CardHeader>
         <CardContent className="p-8">
           <form
-            name="contractor-signup"
-            method="POST"
-            data-netlify="true"
-            action="/signup-thank-you"
+            id="signup-form"
             class="space-y-6"
           >
-            <input type="hidden" name="form-name" value="contractor-signup" />
             <!-- Business Information -->
             <div class="space-y-4">
               <h3 class="text-lg font-semibold text-charcoal">Business Information</h3>
@@ -327,6 +323,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
             <!-- Submit Button -->
             <div class="pt-6">
               <button
+                id="submit-btn"
                 type="submit"
                 class="w-full bg-primary text-white font-semibold py-4 px-6 rounded-lg hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
@@ -337,6 +334,53 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
               </p>
             </div>
           </form>
+
+          <script>
+            document.getElementById('signup-form')?.addEventListener('submit', async (e) => {
+              e.preventDefault();
+
+              const form = e.target as HTMLFormElement;
+              const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+              const successMessage = document.getElementById('success-message');
+              const errorMessage = document.getElementById('error-message');
+              const errorText = document.getElementById('error-text');
+
+              // Hide messages
+              successMessage?.classList.add('hidden');
+              errorMessage?.classList.add('hidden');
+
+              // Disable submit button
+              submitBtn.disabled = true;
+              submitBtn.textContent = 'Submitting...';
+
+              try {
+                const formData = new FormData(form);
+                const response = await fetch('/api/contractors', {
+                  method: 'POST',
+                  body: formData,
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                  successMessage?.classList.remove('hidden');
+                  form.reset();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                  throw new Error(result.error || 'Failed to submit application');
+                }
+              } catch (error) {
+                errorMessage?.classList.remove('hidden');
+                if (errorText) {
+                  errorText.textContent = error instanceof Error ? error.message : 'An error occurred. Please try again.';
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Application';
+              }
+            });
+          </script>
         </CardContent>
       </Card>
     </div>
