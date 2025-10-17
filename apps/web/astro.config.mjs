@@ -12,7 +12,7 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  output: 'server', // Server mode for admin dashboard and API endpoints
+  output: 'static', // Static by default, SSR where needed (Astro 5 hybrid behavior)
   adapter: netlify(),
   build: {
     inlineStylesheets: 'auto',

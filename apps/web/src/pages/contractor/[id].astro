@@ -1,18 +1,12 @@
 ---
+export const prerender = false; // Server-render for real-time contractor data
+
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
-import { getContractorById, getAllContractors } from '../../lib/db-utils';
-
-// Generate static paths for all contractors at build time
-export async function getStaticPaths() {
-  const contractors = await getAllContractors();
-  return contractors.map((contractor) => ({
-    params: { id: contractor.id },
-  }));
-}
+import { getContractorById } from '../../lib/db-utils';
 
 const { id } = Astro.params;
 
