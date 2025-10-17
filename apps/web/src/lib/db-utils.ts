@@ -12,7 +12,6 @@ export interface ContractorFilters {
  * Get all active contractors from database
  */
 export async function getAllContractors() {
-  if (!db) return [];
   return await db
     .select()
     .from(contractors)
@@ -24,7 +23,6 @@ export async function getAllContractors() {
  * Get contractors with filters
  */
 export async function getFilteredContractors(filters: ContractorFilters) {
-  if (!db) return [];
   const conditions = [eq(contractors.status, 'active')];
 
   if (filters.category) {
@@ -61,7 +59,6 @@ export async function getFilteredContractors(filters: ContractorFilters) {
  * Get top rated contractors
  */
 export async function getFeaturedContractors(limit = 3) {
-  if (!db) return [];
   return await db
     .select()
     .from(contractors)
@@ -79,7 +76,6 @@ export async function getFeaturedContractors(limit = 3) {
  * Get contractor by ID
  */
 export async function getContractorById(id: string) {
-  if (!db) return null;
   const result = await db
     .select()
     .from(contractors)
@@ -93,7 +89,6 @@ export async function getContractorById(id: string) {
  * Get contractors count
  */
 export async function getContractorsCount() {
-  if (!db) return 0;
   const result = await db
     .select({ count: sql<number>`count(*)` })
     .from(contractors)

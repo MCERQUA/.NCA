@@ -204,3 +204,4 @@ When committing changes, follow the established pattern:
 - `PROJECT_STATUS.md`: Detailed feature status and roadmap
 - `DEPLOYMENT.md`: Complete deployment guide for GitHub + Netlify
 - `national_contractor_association_rebuild_prd_astro_react.md`: Original PRD specifications
+- google maps env is already setup in netlify
