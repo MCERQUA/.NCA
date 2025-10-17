@@ -17,6 +17,7 @@ interface ContractorCardProps {
 }
 
 export const ContractorCard: React.FC<ContractorCardProps> = ({
+  id,
   name,
   category,
   description,
@@ -122,12 +123,16 @@ export const ContractorCard: React.FC<ContractorCardProps> = ({
       </CardContent>
 
       <CardFooter className="flex space-x-2">
-        <Button variant="outline" className="flex-1" size="sm">
-          View Profile
-        </Button>
-        <Button className="flex-1" size="sm">
-          Contact
-        </Button>
+        <a href={`/contractor/${id}`} className="flex-1">
+          <Button variant="outline" className="w-full" size="sm">
+            View Profile
+          </Button>
+        </a>
+        <a href={`/contractor/${id}`} className="flex-1">
+          <Button className="w-full" size="sm">
+            Contact
+          </Button>
+        </a>
       </CardFooter>
     </Card>
   );
