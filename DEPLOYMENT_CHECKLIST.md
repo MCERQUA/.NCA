@@ -184,6 +184,54 @@ netlify deploy --prod
 - **Netlify Forms Docs**: https://docs.netlify.com/forms/setup/
 - **Astro Discord**: https://astro.build/chat
 
-**Status**: Ready for Deployment ✅
+**Status**: Code Pushed to GitHub ✅
 
-Last Updated: 2025-10-16
+## 🎯 IMMEDIATE NEXT STEPS
+
+### 1. Add Environment Variables in Netlify
+
+Go to: **Netlify Dashboard → Your Site → Site configuration → Environment variables**
+
+Click "Add a variable" and add these TWO required variables:
+
+**Variable 1:**
+- Key: `DATABASE_URL`
+- Value: `postgresql://neondb_owner:npg_KpTxIohyB4d7@ep-shiny-union-ad62n69b-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require`
+
+**Variable 2:**
+- Key: `PUBLIC_GOOGLE_MAPS_API_KEY`
+- Value: `AIzaSyBdhKFm1TR8q8fdBE1OXSKAwW6i12hXDr8`
+
+### 2. Trigger Redeploy
+
+After adding environment variables:
+- Go to **Deploys** tab
+- Click "Trigger deploy" → "Deploy site"
+- OR wait for automatic deploy from GitHub push
+
+### 3. What to Expect
+
+**During Deploy:**
+- Build will take 2-3 minutes
+- Check deploy logs for any errors
+
+**After Deploy:**
+- Site will show NO fake contractors ✅
+- Homepage will say "Be the first contractor in our network"
+- Directory will show "No contractors found"
+- Maps will be empty (until someone signs up)
+
+**This is CORRECT** - all mock data is gone!
+
+### 4. Test Contractor Signup
+
+Once deployed:
+1. Visit `https://yoursite.netlify.app/signup`
+2. Fill out the contractor form completely
+3. Submit
+4. Visit `/directory` - contractor should appear!
+5. Check homepage - marker should show on map!
+
+---
+
+Last Updated: 2025-10-17 (Production Ready)
