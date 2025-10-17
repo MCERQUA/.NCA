@@ -1,10 +1,6 @@
 [build]
-  base = "apps/web"
   command = "pnpm build"
-  publish = "dist"
-
-[functions]
-  directory = ".netlify/v1/functions"
+  publish = "apps/web/dist"
 
 # Environment variables (set these in Netlify UI)
 [build.environment]

@@ -13,7 +13,9 @@ export default defineConfig({
     }),
   ],
   output: 'static', // Static by default, SSR where needed (Astro 5 hybrid behavior)
-  adapter: netlify(),
+  adapter: netlify({
+    edgeMiddleware: true,
+  }),
   build: {
     inlineStylesheets: 'auto',
   },
