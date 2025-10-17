@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 ---
 
@@ -7,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
   title="Contact Us - National Contractor Association"
   description="Get in touch with the National Contractor Association. We're here to help contractors and customers connect."
 >
+  <Header />
   <main class="min-h-screen bg-gray-50 py-12 px-4">
     <div class="container mx-auto max-w-2xl">
       <div class="text-center mb-8">
@@ -135,4 +138,5 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
       </div>
     </div>
   </main>
+  <Footer />
 </BaseLayout>

@@ -34,12 +34,16 @@ import { Button } from './ui/Button';
 
     <!-- CTA Buttons -->
     <div class="hidden md:flex items-center space-x-3">
-      <Button client:load variant="outline" size="sm" className="hidden lg:inline-flex">
-        Sign In
-      </Button>
-      <Button client:load size="sm">
-        List Your Business
-      </Button>
+      <a href="/signin">
+        <Button client:load variant="outline" size="sm" className="hidden lg:inline-flex">
+          Sign In
+        </Button>
+      </a>
+      <a href="/join">
+        <Button client:load size="sm">
+          List Your Business
+        </Button>
+      </a>
     </div>
 
     <!-- Mobile Menu Button -->
@@ -73,12 +77,16 @@ import { Button } from './ui/Button';
         Join NCA
       </a>
       <div class="pt-4 pb-2 space-y-2">
-        <Button client:load variant="outline" className="w-full">
-          Sign In
-        </Button>
-        <Button client:load className="w-full">
-          List Your Business
-        </Button>
+        <a href="/signin">
+          <Button client:load variant="outline" className="w-full">
+            Sign In
+          </Button>
+        </a>
+        <a href="/join">
+          <Button client:load className="w-full">
+            List Your Business
+          </Button>
+        </a>
       </div>
     </div>
   </div>
