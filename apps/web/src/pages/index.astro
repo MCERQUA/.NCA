@@ -1,10 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
+import { ContractorCard } from '../components/ContractorCard';
+import { mockContractors } from '../data/contractors';
+
+// Get featured contractors (top 3 by rating)
+const featuredContractors = mockContractors
+  .sort((a, b) => b.rating - a.rating)
+  .slice(0, 3);
 ---
 
 <BaseLayout>
+  <Header />
   <main class="min-h-screen">
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-b from-white to-gray-50 py-20 px-4">
@@ -48,12 +58,60 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           {['Roofing', 'Electrical', 'Plumbing', 'HVAC', 'Painting', 'Remodeling', 'Landscaping', 'Flooring'].map((service) => (
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <h3 class="font-semibold text-lg">{service}</h3>
-              </CardContent>
-            </Card>
+            <a href={`/directory?category=${service.toLowerCase()}`}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+                <CardContent className="p-6 text-center">
+                  <h3 class="font-semibold text-lg group-hover:text-primary transition-colors">{service}</h3>
+                </CardContent>
+              </Card>
+            </a>
           ))}
+        </div>
+        <div class="text-center mt-8">
+          <a href="/categories">
+            <Button client:load variant="outline" size="lg">
+              View All Categories
+            </Button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Contractors -->
+    <section class="py-16 px-4 bg-white">
+      <div class="container mx-auto max-w-6xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-heading font-bold text-charcoal mb-4">
+            Featured Contractors
+          </h2>
+          <p class="text-xl text-slate">
+            Meet our top-rated professionals ready to help with your next project
+          </p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          {featuredContractors.map((contractor) => (
+            <ContractorCard
+              client:load
+              id={contractor.id}
+              name={contractor.name}
+              category={contractor.category}
+              description={contractor.description}
+              location={contractor.location}
+              rating={contractor.rating}
+              reviewCount={contractor.reviewCount}
+              imageUrl={contractor.imageUrl}
+              verified={contractor.verified}
+              specialties={contractor.specialties}
+              yearsInBusiness={contractor.yearsInBusiness}
+            />
+          ))}
+        </div>
+        <div class="text-center mt-8">
+          <a href="/directory">
+            <Button client:load size="lg">
+              Browse All Contractors
+            </Button>
+          </a>
         </div>
       </div>
     </section>
@@ -88,14 +146,19 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
           Join our network and connect with customers looking for your services.
         </p>
         <div class="flex gap-4 justify-center flex-wrap">
-          <Button client:load size="lg" variant="default">
-            Join Now
-          </Button>
-          <Button client:load size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-charcoal">
-            Learn More
-          </Button>
+          <a href="/join">
+            <Button client:load size="lg" variant="default">
+              Join Now
+            </Button>
+          </a>
+          <a href="/join">
+            <Button client:load size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-charcoal">
+              Learn More
+            </Button>
+          </a>
         </div>
       </div>
     </section>
   </main>
+  <Footer />
 </BaseLayout>
