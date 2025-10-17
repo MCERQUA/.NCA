@@ -5,6 +5,27 @@ import Footer from '../components/Footer.astro';
 import { ContractorCard } from '../components/ContractorCard';
 import { mockContractors, categories } from '../data/contractors';
 import { Button } from '../components/ui/Button';
+
+// Get query parameters from URL
+const url = new URL(Astro.request.url);
+const categoryParam = url.searchParams.get('category')?.toLowerCase() || '';
+const locationParam = url.searchParams.get('location')?.toLowerCase() || '';
+
+// Filter contractors based on search params
+let filteredContractors = mockContractors;
+
+if (categoryParam) {
+  filteredContractors = filteredContractors.filter(contractor =>
+    contractor.category.toLowerCase().includes(categoryParam) ||
+    contractor.specialties.some(s => s.toLowerCase().includes(categoryParam))
+  );
+}
+
+if (locationParam) {
+  filteredContractors = filteredContractors.filter(contractor =>
+    contractor.location.toLowerCase().includes(locationParam)
+  );
+}
 ---
 
 <BaseLayout title="Contractor Directory - National Contractor Association">
@@ -74,10 +95,12 @@ import { Button } from '../components/ui/Button';
         <div class="flex items-center justify-between mb-8">
           <div>
             <h2 class="text-2xl font-heading font-bold text-charcoal mb-1">
-              All Contractors
+              {categoryParam || locationParam ? 'Search Results' : 'All Contractors'}
             </h2>
             <p class="text-slate">
-              Showing {mockContractors.length} verified contractors
+              Showing {filteredContractors.length} verified contractor{filteredContractors.length !== 1 ? 's' : ''}
+              {categoryParam && <span> for "{categoryParam}"</span>}
+              {locationParam && <span> in "{locationParam}"</span>}
             </p>
           </div>
 
@@ -94,24 +117,35 @@ import { Button } from '../components/ui/Button';
         </div>
 
         <!-- Contractor Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockContractors.map((contractor) => (
-            <ContractorCard
-              client:load
-              id={contractor.id}
-              name={contractor.name}
-              category={contractor.category}
-              description={contractor.description}
-              location={contractor.location}
-              rating={contractor.rating}
-              reviewCount={contractor.reviewCount}
-              imageUrl={contractor.imageUrl}
-              verified={contractor.verified}
-              specialties={contractor.specialties}
-              yearsInBusiness={contractor.yearsInBusiness}
-            />
-          ))}
-        </div>
+        {filteredContractors.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredContractors.map((contractor) => (
+              <ContractorCard
+                client:load
+                id={contractor.id}
+                name={contractor.name}
+                category={contractor.category}
+                description={contractor.description}
+                location={contractor.location}
+                rating={contractor.rating}
+                reviewCount={contractor.reviewCount}
+                imageUrl={contractor.imageUrl}
+                verified={contractor.verified}
+                specialties={contractor.specialties}
+                yearsInBusiness={contractor.yearsInBusiness}
+              />
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-16">
+            <div class="text-6xl mb-4">🔍</div>
+            <h3 class="text-2xl font-heading font-bold text-charcoal mb-2">No contractors found</h3>
+            <p class="text-slate mb-6">Try adjusting your search criteria or browse all contractors.</p>
+            <a href="/directory">
+              <Button client:load>View All Contractors</Button>
+            </a>
+          </div>
+        )}
 
         <!-- Pagination -->
         <div class="mt-12 flex justify-center">
