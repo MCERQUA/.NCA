@@ -62,7 +62,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
           <CardDescription>Fill out all required fields to create your profile</CardDescription>
         </CardHeader>
         <CardContent className="p-8">
-          <form id="contractor-form" class="space-y-6">
+          <form
+            name="contractor-signup"
+            method="POST"
+            data-netlify="true"
+            action="/signup-thank-you"
+            class="space-y-6"
+          >
+            <input type="hidden" name="form-name" value="contractor-signup" />
             <!-- Business Information -->
             <div class="space-y-4">
               <h3 class="text-lg font-semibold text-charcoal">Business Information</h3>
@@ -321,14 +328,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
             <div class="pt-6">
               <button
                 type="submit"
-                id="submit-button"
-                class="w-full bg-primary text-white font-semibold py-4 px-6 rounded-lg hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="w-full bg-primary text-white font-semibold py-4 px-6 rounded-lg hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
-                <span id="button-text">Create Profile</span>
-                <span id="button-loading" class="hidden">Creating Profile...</span>
+                Submit Application
               </button>
               <p class="text-sm text-gray-500 text-center mt-3">
-                Your profile will be live immediately and appear on the map
+                We'll review your application and activate your profile within 24 hours
               </p>
             </div>
           </form>
@@ -337,64 +342,4 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
     </div>
   </main>
   <Footer />
-
-  <script>
-    const form = document.getElementById('contractor-form') as HTMLFormElement;
-    const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
-    const buttonText = document.getElementById('button-text') as HTMLElement;
-    const buttonLoading = document.getElementById('button-loading') as HTMLElement;
-    const successMessage = document.getElementById('success-message') as HTMLElement;
-    const errorMessage = document.getElementById('error-message') as HTMLElement;
-    const errorText = document.getElementById('error-text') as HTMLElement;
-
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      // Disable submit button and show loading
-      submitButton.disabled = true;
-      buttonText.classList.add('hidden');
-      buttonLoading.classList.remove('hidden');
-
-      // Hide previous messages
-      successMessage.classList.add('hidden');
-      errorMessage.classList.add('hidden');
-
-      try {
-        const formData = new FormData(form);
-
-        const response = await fetch('/api/contractors', {
-          method: 'POST',
-          body: formData,
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          // Show success message
-          successMessage.classList.remove('hidden');
-
-          // Reset form
-          form.reset();
-
-          // Scroll to success message
-          successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else {
-          // Show error message
-          errorText.textContent = data.error || 'An unexpected error occurred. Please try again.';
-          errorMessage.classList.remove('hidden');
-          errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      } catch (error) {
-        console.error('Error submitting form:', error);
-        errorText.textContent = 'Network error. Please check your connection and try again.';
-        errorMessage.classList.remove('hidden');
-        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } finally {
-        // Re-enable submit button
-        submitButton.disabled = false;
-        buttonText.classList.remove('hidden');
-        buttonLoading.classList.add('hidden');
-      }
-    });
-  </script>
 </BaseLayout>
