@@ -6,6 +6,7 @@ import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { ContractorCard } from '../components/ContractorCard';
 import { ContractorMap } from '../components/ContractorMap';
+import { InteractiveContractorMap } from '../components/InteractiveContractorMap';
 import { mockContractors } from '../data/contractors';
 
 // Get featured contractors (top 3 by rating)
@@ -133,6 +134,37 @@ if (!GOOGLE_MAPS_API_KEY) {
           <a href="/directory">
             <Button client:load size="lg">
               Browse All Contractors
+            </Button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Map Section -->
+    <section class="py-16 px-4 bg-gray-50">
+      <div class="container mx-auto max-w-7xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-heading font-bold text-charcoal mb-4">
+            Explore Our Contractor Network
+          </h2>
+          <p class="text-xl text-slate max-w-3xl mx-auto">
+            Click on any marker to view contractor details and profiles. Our network automatically updates as new verified contractors join.
+          </p>
+        </div>
+        {GOOGLE_MAPS_API_KEY ? (
+          <InteractiveContractorMap client:load contractors={mockContractors} apiKey={GOOGLE_MAPS_API_KEY} />
+        ) : (
+          <div class="bg-white rounded-xl shadow-lg p-12 text-center">
+            <p class="text-slate-600">Interactive map is currently unavailable.</p>
+          </div>
+        )}
+        <div class="mt-8 text-center">
+          <p class="text-sm text-slate mb-4">
+            Showing {mockContractors.filter(c => c.coordinates).length} contractors across the United States
+          </p>
+          <a href="/directory">
+            <Button client:load size="lg">
+              View Full Directory
             </Button>
           </a>
         </div>

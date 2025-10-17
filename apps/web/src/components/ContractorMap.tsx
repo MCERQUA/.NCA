@@ -61,6 +61,9 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
     const newMap = new google.maps.Map(mapRef.current, {
       center: { lat: 39.8283, lng: -98.5795 }, // Center of USA
       zoom: 4,
+      disableDefaultUI: true, // Remove controls for background map
+      gestureHandling: 'none', // Disable interactions
+      zoomControl: false,
       styles: [
         {
           featureType: 'poi',
