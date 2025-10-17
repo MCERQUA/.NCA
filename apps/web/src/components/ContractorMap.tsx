@@ -19,12 +19,18 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<any>(null);
   const [markers, setMarkers] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    if (!apiKey) {
+      console.error('Google Maps API key is required');
+      return;
+    }
+
     // Load Google Maps script
     if (!window.google) {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async`;
       script.async = true;
       script.defer = true;
       document.head.appendChild(script);
@@ -59,6 +65,7 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
     });
 
     setMap(newMap);
+    setIsLoading(false);
   };
 
   const updateMarkers = () => {
@@ -142,10 +149,29 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
   };
 
   return (
-    <div
-      ref={mapRef}
-      style={{ width: '100%', height: '500px', borderRadius: '12px' }}
-      className="shadow-lg"
-    />
+    <div style={{ position: 'relative', width: '100%', height: '500px' }}>
+      {isLoading && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#f1f5f9',
+          borderRadius: '12px',
+          zIndex: 10
+        }}>
+          <p style={{ color: '#64748b' }}>Loading map...</p>
+        </div>
+      )}
+      <div
+        ref={mapRef}
+        style={{ width: '100%', height: '500px', borderRadius: '12px' }}
+        className="shadow-lg"
+      />
+    </div>
   );
 };

@@ -13,7 +13,11 @@ const featuredContractors = mockContractors
   .sort((a, b) => b.rating - a.rating)
   .slice(0, 3);
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || import.meta.env.GOOGLE_MAPS_API_KEY;
+const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
+
+if (!GOOGLE_MAPS_API_KEY) {
+  console.error('Google Maps API key is not configured. Please set PUBLIC_GOOGLE_MAPS_API_KEY environment variable.');
+}
 ---
 
 <BaseLayout>
@@ -130,7 +134,13 @@ const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || import
             Explore our network of verified contractors across the nation
           </p>
         </div>
-        <ContractorMap client:load contractors={mockContractors} apiKey={GOOGLE_MAPS_API_KEY} />
+        {GOOGLE_MAPS_API_KEY ? (
+          <ContractorMap client:load contractors={mockContractors} apiKey={GOOGLE_MAPS_API_KEY} />
+        ) : (
+          <div class="bg-white rounded-xl shadow-lg p-12 text-center">
+            <p class="text-slate-600">Map feature is currently unavailable. Please check back later.</p>
+          </div>
+        )}
       </div>
     </section>
 
