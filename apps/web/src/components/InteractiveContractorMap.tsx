@@ -28,24 +28,27 @@ export const InteractiveContractorMap: React.FC<InteractiveContractorMapProps> =
       return;
     }
 
-    // Load Google Maps script
-    if (!window.google) {
-      // Create callback function
-      (window as any).initInteractiveGoogleMap = () => {
-        initMap();
-      };
-
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initInteractiveGoogleMap`;
-      script.async = true;
-      script.defer = true;
-      script.onerror = () => {
-        console.error('Failed to load Google Maps script');
-        setIsLoading(false);
-      };
-      document.head.appendChild(script);
-    } else {
+    // Check if Google Maps is already loaded or loading
+    if (window.google && window.google.maps) {
+      // Already loaded, just init the map
       initMap();
+    } else {
+      // Wait for it to load (the hero map component loads it first)
+      const checkInterval = setInterval(() => {
+        if (window.google && window.google.maps) {
+          clearInterval(checkInterval);
+          initMap();
+        }
+      }, 100);
+
+      // Timeout after 10 seconds
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        if (!window.google) {
+          console.error('Google Maps failed to load');
+          setIsLoading(false);
+        }
+      }, 10000);
     }
   }, [apiKey]);
 
