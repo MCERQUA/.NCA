@@ -40,39 +40,46 @@ NCA/
 
 - Node.js >= 18
 - pnpm >= 8
-- PostgreSQL database
+- PostgreSQL database (Neon, Supabase, Railway, etc.)
+- Google Maps API key
 
-### Installation
+### Quick Start
 
-1. Clone the repository:
-```bash
-cd NCA
-```
+1. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
 
-2. Install dependencies:
-```bash
-pnpm install
-```
+2. **Set up environment variables:**
+   ```bash
+   cp .env.example .env
+   ```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env
-```
+   Edit `.env` and add:
+   - `DATABASE_URL` - Your PostgreSQL connection string
+   - `PUBLIC_GOOGLE_MAPS_API_KEY` - Your Google Maps API key
 
-Edit `.env` and add your configuration values.
+3. **Set up the database:**
+   ```bash
+   cd apps/web
+   pnpm db:push
+   ```
 
-4. Set up the database:
-```bash
-cd packages/database
-pnpm db:push
-```
-
-5. Start the development server:
-```bash
-pnpm dev
-```
+4. **Start the development server:**
+   ```bash
+   cd ../..  # Back to root
+   pnpm dev
+   ```
 
 The application will be available at `http://localhost:4321`
+
+### Complete Production Setup
+
+See [PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md) for detailed instructions on:
+- Setting up a production database
+- Configuring Google Maps API
+- Deploying to Netlify
+- Adding a custom domain
 
 ## Development
 

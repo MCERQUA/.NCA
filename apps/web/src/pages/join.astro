@@ -104,8 +104,26 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
         </Card>
       </div>
 
-      <!-- Sign Up Form -->
-      <Card>
+      <!-- CTA to Signup -->
+      <Card className="bg-gradient-to-br from-primary-50 to-white border-2 border-primary">
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl">Ready to Get Started?</CardTitle>
+          <CardDescription className="text-lg">Create your complete contractor profile now - it only takes 5 minutes</CardDescription>
+        </CardHeader>
+        <CardContent className="p-8">
+          <div class="flex flex-col gap-4">
+            <a href="/signup" class="w-full bg-primary text-white font-semibold py-4 px-6 rounded-lg hover:bg-primary-600 transition-colors text-center text-lg">
+              Create Your Profile Now
+            </a>
+            <p class="text-center text-sm text-gray-600">
+              ✓ Instant activation  •  ✓ Appear on map immediately  •  ✓ Free to start
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <!-- Legacy Form (Hidden - keeping for backup) -->
+      <Card className="hidden">
         <CardHeader>
           <CardTitle>Get Started Today</CardTitle>
           <CardDescription>Fill out the form below and we'll get you set up</CardDescription>

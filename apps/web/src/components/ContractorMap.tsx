@@ -1,5 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import type { Contractor } from '../data/contractors';
+
+interface Contractor {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  location: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+  rating: number;
+  reviewCount: number;
+  verified: boolean;
+  specialties: string[];
+  yearsInBusiness: number;
+}
 
 // Declare global google maps types
 declare global {
@@ -60,7 +76,7 @@ export const ContractorMap: React.FC<ContractorMapProps> = ({ contractors, apiKe
 
     const newMap = new google.maps.Map(mapRef.current, {
       center: { lat: 39.8283, lng: -98.5795 }, // Center of USA
-      zoom: 4,
+      zoom: 5, // Focused on USA only
       disableDefaultUI: true, // Remove controls for background map
       gestureHandling: 'none', // Disable interactions
       zoomControl: false,

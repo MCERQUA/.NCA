@@ -1,0 +1,400 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
+---
+
+<BaseLayout
+  title="Contractor Signup - National Contractor Association"
+  description="Create your contractor profile and start connecting with customers today."
+>
+  <Header />
+  <main class="min-h-screen bg-gray-50 py-12 px-4">
+    <div class="container mx-auto max-w-4xl">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-charcoal mb-4">
+          Create Your Contractor Profile
+        </h1>
+        <p class="text-xl text-slate max-w-2xl mx-auto">
+          Join our network and start appearing on the map. Fill out the form below to create your profile.
+        </p>
+      </div>
+
+      <!-- Success Message (hidden by default) -->
+      <div id="success-message" class="hidden mb-8">
+        <Card className="border-green-500 bg-green-50">
+          <CardContent className="p-6">
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <h3 class="text-lg font-semibold text-green-900 mb-1">Profile Created Successfully!</h3>
+                <p class="text-green-800">Your contractor profile has been created and is now live on the map. <a href="/directory" class="underline font-medium">View directory</a></p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <!-- Error Message (hidden by default) -->
+      <div id="error-message" class="hidden mb-8">
+        <Card className="border-red-500 bg-red-50">
+          <CardContent className="p-6">
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <h3 class="text-lg font-semibold text-red-900 mb-1">Error Creating Profile</h3>
+                <p id="error-text" class="text-red-800"></p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <!-- Signup Form -->
+      <Card>
+        <CardHeader>
+          <CardTitle>Contractor Information</CardTitle>
+          <CardDescription>Fill out all required fields to create your profile</CardDescription>
+        </CardHeader>
+        <CardContent className="p-8">
+          <form id="contractor-form" class="space-y-6">
+            <!-- Business Information -->
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold text-charcoal">Business Information</h3>
+
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                    Contact Name <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="John Smith"
+                  />
+                </div>
+
+                <div>
+                  <label for="businessName" class="block text-sm font-medium text-gray-700 mb-2">
+                    Business Name
+                  </label>
+                  <input
+                    type="text"
+                    id="businessName"
+                    name="businessName"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Smith Roofing LLC"
+                  />
+                  <p class="text-xs text-gray-500 mt-1">Leave blank to use contact name</p>
+                </div>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                    Primary Service Category <span class="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="category"
+                    name="category"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    <option value="">Select a category...</option>
+                    <option value="Roofing">Roofing</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Plumbing">Plumbing</option>
+                    <option value="HVAC">HVAC</option>
+                    <option value="Painting">Painting</option>
+                    <option value="Remodeling">Remodeling</option>
+                    <option value="Landscaping">Landscaping</option>
+                    <option value="Flooring">Flooring</option>
+                    <option value="General Contractor">General Contractor</option>
+                    <option value="Windows & Doors">Windows & Doors</option>
+                    <option value="Foundation">Foundation</option>
+                    <option value="Pool Maintenance">Pool Maintenance</option>
+                    <option value="Concrete">Concrete</option>
+                    <option value="Masonry">Masonry</option>
+                    <option value="Carpentry">Carpentry</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="specialties" class="block text-sm font-medium text-gray-700 mb-2">
+                    Specialties
+                  </label>
+                  <input
+                    type="text"
+                    id="specialties"
+                    name="specialties"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Shingle Roofing, Flat Roofs"
+                  />
+                  <p class="text-xs text-gray-500 mt-1">Separate with commas</p>
+                </div>
+              </div>
+
+              <div>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                  Business Description <span class="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  required
+                  rows="4"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  placeholder="Describe your business, services, and what makes you stand out..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Location Information -->
+            <div class="space-y-4 pt-6 border-t">
+              <h3 class="text-lg font-semibold text-charcoal">Location</h3>
+
+              <div>
+                <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+                  Street Address
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="123 Main Street"
+                />
+              </div>
+
+              <div class="grid md:grid-cols-3 gap-4">
+                <div>
+                  <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
+                    City <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Los Angeles"
+                  />
+                </div>
+
+                <div>
+                  <label for="state" class="block text-sm font-medium text-gray-700 mb-2">
+                    State <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="state"
+                    name="state"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="CA"
+                    maxlength="2"
+                  />
+                </div>
+
+                <div>
+                  <label for="zipCode" class="block text-sm font-medium text-gray-700 mb-2">
+                    ZIP Code
+                  </label>
+                  <input
+                    type="text"
+                    id="zipCode"
+                    name="zipCode"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="90001"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="space-y-4 pt-6 border-t">
+              <h3 class="text-lg font-semibold text-charcoal">Contact Information</h3>
+
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                    Phone Number <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="contact@example.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="website" class="block text-sm font-medium text-gray-700 mb-2">
+                  Website
+                </label>
+                <input
+                  type="url"
+                  id="website"
+                  name="website"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="https://example.com"
+                />
+              </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="space-y-4 pt-6 border-t">
+              <h3 class="text-lg font-semibold text-charcoal">Additional Information</h3>
+
+              <div class="grid md:grid-cols-3 gap-4">
+                <div>
+                  <label for="licenseNumber" class="block text-sm font-medium text-gray-700 mb-2">
+                    License Number
+                  </label>
+                  <input
+                    type="text"
+                    id="licenseNumber"
+                    name="licenseNumber"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="LIC#123456"
+                  />
+                </div>
+
+                <div>
+                  <label for="yearsInBusiness" class="block text-sm font-medium text-gray-700 mb-2">
+                    Years in Business
+                  </label>
+                  <input
+                    type="number"
+                    id="yearsInBusiness"
+                    name="yearsInBusiness"
+                    min="0"
+                    max="100"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="10"
+                  />
+                </div>
+
+                <div>
+                  <label for="employeeCount" class="block text-sm font-medium text-gray-700 mb-2">
+                    Number of Employees
+                  </label>
+                  <input
+                    type="number"
+                    id="employeeCount"
+                    name="employeeCount"
+                    min="1"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="5"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-6">
+              <button
+                type="submit"
+                id="submit-button"
+                class="w-full bg-primary text-white font-semibold py-4 px-6 rounded-lg hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span id="button-text">Create Profile</span>
+                <span id="button-loading" class="hidden">Creating Profile...</span>
+              </button>
+              <p class="text-sm text-gray-500 text-center mt-3">
+                Your profile will be live immediately and appear on the map
+              </p>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  </main>
+  <Footer />
+
+  <script>
+    const form = document.getElementById('contractor-form') as HTMLFormElement;
+    const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+    const buttonText = document.getElementById('button-text') as HTMLElement;
+    const buttonLoading = document.getElementById('button-loading') as HTMLElement;
+    const successMessage = document.getElementById('success-message') as HTMLElement;
+    const errorMessage = document.getElementById('error-message') as HTMLElement;
+    const errorText = document.getElementById('error-text') as HTMLElement;
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Disable submit button and show loading
+      submitButton.disabled = true;
+      buttonText.classList.add('hidden');
+      buttonLoading.classList.remove('hidden');
+
+      // Hide previous messages
+      successMessage.classList.add('hidden');
+      errorMessage.classList.add('hidden');
+
+      try {
+        const formData = new FormData(form);
+
+        const response = await fetch('/api/contractors', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Show success message
+          successMessage.classList.remove('hidden');
+
+          // Reset form
+          form.reset();
+
+          // Scroll to success message
+          successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          // Show error message
+          errorText.textContent = data.error || 'An unexpected error occurred. Please try again.';
+          errorMessage.classList.remove('hidden');
+          errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        errorText.textContent = 'Network error. Please check your connection and try again.';
+        errorMessage.classList.remove('hidden');
+        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } finally {
+        // Re-enable submit button
+        submitButton.disabled = false;
+        buttonText.classList.remove('hidden');
+        buttonLoading.classList.add('hidden');
+      }
+    });
+  </script>
+</BaseLayout>
