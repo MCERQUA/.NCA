@@ -1,7 +1,6 @@
 [build]
   base = "apps/web"
   command = "pnpm build"
-  # publish directory is automatically handled by @astrojs/netlify adapter
 
 # Environment variables (set these in Netlify UI)
 [build.environment]
@@ -10,12 +9,6 @@
   # Disable secrets scanning for public Google Maps API key
   SECRETS_SCAN_OMIT_KEYS = "PUBLIC_GOOGLE_MAPS_API_KEY"
   SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
-
-# Redirects and rewrites
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
 
 # Headers for security and performance
 [[headers]]
