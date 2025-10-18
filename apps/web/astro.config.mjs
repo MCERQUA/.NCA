@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,10 +11,7 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  output: 'static', // Static by default, SSR where needed (Astro 5 hybrid behavior)
-  adapter: netlify({
-    edgeMiddleware: true,
-  }),
+  output: 'static', // Pure static build
   build: {
     inlineStylesheets: 'auto',
   },
