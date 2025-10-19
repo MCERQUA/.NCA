@@ -1,11 +1,19 @@
 import { v2 as cloudinary } from 'cloudinary';
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: import.meta.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: import.meta.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_API_KEY,
-  api_secret: import.meta.env.CLOUDINARY_API_SECRET || process.env.CLOUDINARY_API_SECRET,
-});
+// Configure Cloudinary using CLOUDINARY_URL (which contains cloud_name, api_key, and api_secret)
+// Format: cloudinary://<api_key>:<api_secret>@<cloud_name>
+const cloudinaryUrl = import.meta.env.CLOUDINARY_URL || process.env.CLOUDINARY_URL;
+
+if (cloudinaryUrl) {
+  cloudinary.config(cloudinaryUrl);
+} else {
+  // Fallback to individual environment variables if CLOUDINARY_URL is not set
+  cloudinary.config({
+    cloud_name: import.meta.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: import.meta.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_API_KEY,
+    api_secret: import.meta.env.CLOUDINARY_API_SECRET || process.env.CLOUDINARY_API_SECRET,
+  });
+}
 
 export interface UploadResult {
   url: string;

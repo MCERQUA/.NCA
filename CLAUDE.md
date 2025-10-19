@@ -14,7 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. **NETLIFY ENVIRONMENT VARIABLES ARE ALREADY CONFIGURED**
    - Netlify has Neon database integration - `NETLIFY_DATABASE_URL` is auto-provided
    - Google Maps API key is already set up in Netlify dashboard
-   - Cloudinary cloud name is configured (API_KEY and API_SECRET still need to be added for image uploads)
+   - Cloudinary is fully configured via `CLOUDINARY_URL` (contains all credentials in one URL)
    - DO NOT ask the user to add environment variables unless you've verified they're actually missing
    - If the site was working before and broke after your changes, it's YOUR CODE, not env vars
 
@@ -140,12 +140,10 @@ The following environment variables are **already set up** in Netlify dashboard:
 - ✅ **NETLIFY_DATABASE_URL** - Neon PostgreSQL database (auto-configured via Netlify integration)
 - ✅ **NETLIFY_DATABASE_URL_UNPOOLED** - Neon unpooled connection (auto-configured)
 - ✅ **PUBLIC_GOOGLE_MAPS_API_KEY** - Google Maps API for maps and geocoding
-- ✅ **CLOUDINARY_CLOUD_NAME** - Cloudinary cloud name for image uploads
+- ✅ **CLOUDINARY_URL** - Cloudinary full URL with credentials (format: `cloudinary://<api_key>:<api_secret>@<cloud_name>`)
 
 ### Additional Variables Needed (if using these features)
 Copy `.env.example` to `.env` for local development:
-- **CLOUDINARY_API_KEY** - Cloudinary API key (required for user image uploads)
-- **CLOUDINARY_API_SECRET** - Cloudinary API secret (required for user image uploads)
 - **STACK_PROJECT_ID, STACK_PUBLISHABLE_CLIENT_KEY, STACK_SECRET_SERVER_KEY** - Stack Auth (optional, for future auth)
 - **PUBLIC_MAPBOX_ACCESS_TOKEN** - Mapbox integration (optional alternative to Google Maps)
 - **PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY** - Payment processing (optional, for future premium features)
@@ -155,7 +153,9 @@ Copy `.env.example` to `.env` for local development:
 - Variables prefixed with `PUBLIC_` are exposed to client-side code
 - Netlify automatically provides `NETLIFY_DATABASE_URL` via Neon integration - DO NOT manually add DATABASE_URL
 - Google Maps API is already configured - DO NOT ask user to add it again
-- Cloudinary requires all 3 variables (CLOUD_NAME, API_KEY, API_SECRET) for image uploads to work
+- **Cloudinary**: Only `CLOUDINARY_URL` is needed - it contains cloud_name, api_key, and api_secret in one URL
+  - The SDK automatically parses the URL and extracts all credentials
+  - Alternatively, you can set separate `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` variables (fallback)
 
 ## Deployment
 
