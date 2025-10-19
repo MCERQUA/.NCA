@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { StackAuthProvider } from './StackProvider';
+import { StackAuthProvider, useStackAuth } from './StackProvider';
 import { Card, CardContent } from './ui/Card';
 
 // Stack Auth sign-in component
 function SignInForm() {
+  const stackAuth = useStackAuth();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
@@ -15,20 +16,35 @@ function SignInForm() {
     setError('');
 
     try {
-      // Stack Auth sign-in logic will go here
-      // For now, we'll show a message
-      console.log('Sign in with:', email, password);
-      setError('Stack Auth integration requires API keys. Please configure STACK_PROJECT_ID and STACK_PUBLISHABLE_CLIENT_KEY environment variables.');
+      if (!stackAuth) {
+        setError('Authentication is not configured. Please contact support.');
+        return;
+      }
+
+      // Use Stack Auth to sign in with email/password
+      await stackAuth.signInWithEmailPassword(email, password);
+
+      // Redirect will happen automatically via Stack Auth config
+      window.location.href = '/dashboard';
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sign in');
+      setError(err instanceof Error ? err.message : 'Failed to sign in. Please check your credentials.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleSignIn = () => {
-    console.log('Google sign-in clicked');
-    setError('Stack Auth integration requires API keys. Please configure environment variables.');
+  const handleGoogleSignIn = async () => {
+    try {
+      if (!stackAuth) {
+        setError('Authentication is not configured. Please contact support.');
+        return;
+      }
+
+      // Use Stack Auth Google OAuth
+      await stackAuth.signInWithOAuth('google');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to sign in with Google.');
+    }
   };
 
   return (

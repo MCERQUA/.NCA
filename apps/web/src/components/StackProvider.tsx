@@ -41,3 +41,8 @@ export function StackAuthProvider({ children }: { children: React.ReactNode }) {
     </StackProvider>
   );
 }
+
+// Custom hook to access Stack Auth instance
+export function useStackAuth() {
+  return stackApp;
+}
