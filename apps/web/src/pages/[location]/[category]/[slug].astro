@@ -9,6 +9,9 @@ import { Button } from '../../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card';
 import { getAllContractors, generateSlug } from '../../../lib/db-utils';
 
+// Enable prerendering for static page generation in server mode
+export const prerender = true;
+
 // Generate static paths at build time
 export async function getStaticPaths() {
   try {
