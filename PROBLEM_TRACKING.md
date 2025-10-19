@@ -60,18 +60,42 @@ Possible causes:
 3. Netlify's CDN caching 404 responses
 4. Base directory mismatch in netlify.toml vs deployment
 
+### Deployment Log Analysis (2025-10-19 12:52 PM)
+
+**Build Output:**
+```
+✅ Build successful: "16:53:39 [build] Complete!"
+✅ SSR Function generated: "16:53:39 [@astrojs/netlify] Generated SSR Function"
+✅ Signup page prerendered: "/signup/index.html"
+⚠️ Deploy shows: "0 new file(s) to upload" and "0 new function(s) to upload"
+```
+
+**Critical Finding:**
+The deployment says "0 new function(s) to upload" - meaning Netlify is using the CACHED SSR function from a previous deployment, not the newly built one.
+
+**Redirects Configuration:**
+- `_redirects` file exists: `/* /.netlify/functions/ssr 200`
+- This should route all non-static requests to the SSR function
+
+**Hypothesis:**
+1. Static `/signup/index.html` exists and loads fine ✅
+2. JavaScript in signup page tries to POST to `/api/upload-image` and `/api/contractors`
+3. These requests should be caught by `/* /.netlify/functions/ssr 200` redirect
+4. SSR function should handle API routes
+5. BUT: If the SSR function is stale/cached from before API routes were added, it won't have the handlers
+
 ### Next Steps Required
 
 **🚫 DO NOT:**
 - Toggle `prerender` settings (tried 2x - doesn't fix routing)
-- Make code changes without seeing Netlify deploy logs
+- Make code changes without confirming deployment issue
 - Assume environment variables are missing (they're documented as configured)
 
 **✅ DO:**
-1. Get Netlify deployment logs from user
-2. Check if SSR function is being deployed
-3. Verify Netlify routing configuration
-4. Check for cached 404 responses in Netlify CDN
+1. Force a fresh SSR function deployment (clear Netlify cache)
+2. Verify API routes are in the deployed SSR function
+3. Check if Netlify is serving stale SSR function
+4. Test API endpoints directly: `curl -X POST https://nationalcontractorassociation.com/api/contractors`
 
 ### Mistake Counter
 
