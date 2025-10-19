@@ -12,7 +12,7 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  output: 'static', // Static site generation
+  output: 'server', // Server-side rendering with on-demand functions
   adapter: netlify(),
   build: {
     inlineStylesheets: 'auto',

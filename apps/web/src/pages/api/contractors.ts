@@ -2,6 +2,9 @@ import type { APIRoute } from 'astro';
 import { db } from '../../db';
 import { contractors } from '../../db/schema';
 
+// This must be a serverless function, not prerendered
+export const prerender = false;
+
 // Google Maps Geocoding API
 const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
 
