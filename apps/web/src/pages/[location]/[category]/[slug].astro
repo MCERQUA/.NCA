@@ -221,6 +221,60 @@ const rating = contractor.rating ? parseFloat(contractor.rating) : 0;
               </CardContent>
             </Card>
           )}
+
+          <!-- Project Gallery / Portfolio -->
+          {(() => {
+            // Map contractor to their image folder
+            const imageFolder = contractor.businessName === 'Insulation Contractors of Arizona'
+              ? 'ICA'
+              : contractor.businessName === 'Mrs. Spray Foam'
+              ? 'Mrs.Sprayfoam'
+              : null;
+
+            if (!imageFolder) return null;
+
+            // Get jobsite images (exclude logos)
+            const jobsiteImages = [
+              ...(imageFolder === 'ICA' ? [
+                '/contractors/images/ICA/509430945_743792478214456_699274312190880149_n.jpg',
+                '/contractors/images/ICA/511146280_746374591289578_7457903423549445317_n.jpg',
+                '/contractors/images/ICA/511200877_747038391223198_3041720709348562847_n.jpg',
+                '/contractors/images/ICA/520283796_760187506574953_6764472423521285766_n.jpg',
+                '/contractors/images/ICA/529973528_780163767910660_4159666756334738252_n.jpg',
+              ] : []),
+              ...(imageFolder === 'Mrs.Sprayfoam' ? [
+                '/contractors/images/Mrs.Sprayfoam/494074864_1102586738578156_7447190070476670660_n.jpg',
+                '/contractors/images/Mrs.Sprayfoam/496828334_18067338590504404_4045996225567687938_n.jpg',
+                '/contractors/images/Mrs.Sprayfoam/500864457_1125439939626169_5653532517149426032_n.jpg',
+                '/contractors/images/Mrs.Sprayfoam/504325524_1130283205808509_6537418619613075220_n.jpg',
+                '/contractors/images/Mrs.Sprayfoam/518412218_1163862585783904_4560658369403756717_n.jpg',
+              ] : []),
+            ];
+
+            if (jobsiteImages.length === 0) return null;
+
+            return (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Project Gallery</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {jobsiteImages.map((image, index) => (
+                      <div key={index} class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 hover:scale-105 transition-transform cursor-pointer">
+                        <img
+                          src={image}
+                          alt={`Project ${index + 1}`}
+                          class="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })()}
         </div>
 
         <!-- Sidebar -->
