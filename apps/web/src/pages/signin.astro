@@ -1,0 +1,38 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SignInCard } from '../components/SignInCard';
+---
+
+<BaseLayout title="Sign In - National Contractor Association">
+  <Header />
+
+  <main class="min-h-screen bg-gray-50 py-16 px-4">
+    <div class="container mx-auto max-w-md">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-heading font-bold text-charcoal mb-4">
+          Welcome Back
+        </h1>
+        <p class="text-lg text-slate">
+          Sign in to access your contractor dashboard
+        </p>
+      </div>
+
+      <SignInCard client:load />
+
+      <div class="mt-6 text-center">
+        <p class="text-slate">
+          Don't have an account?{' '}
+          <a href="/signup" class="text-primary font-medium hover:underline">
+            Create your contractor profile
+          </a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
