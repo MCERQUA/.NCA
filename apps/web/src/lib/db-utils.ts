@@ -96,3 +96,53 @@ export async function getContractorsCount() {
 
   return result[0]?.count || 0;
 }
+
+/**
+ * Generate SEO-friendly slug from text
+ */
+export function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/**
+ * Generate contractor URL path
+ */
+export function generateContractorUrl(contractor: any): string {
+  const location = generateSlug(`${contractor.city}-${contractor.state}`);
+  const category = generateSlug(contractor.category);
+  const name = generateSlug(contractor.businessName || contractor.name);
+  return `/${location}/${category}/${name}`;
+}
+
+/**
+ * Get contractor by SEO-friendly URL parts
+ */
+export async function getContractorBySlug(location: string, category: string, slug: string) {
+  // Parse location into city and state
+  const locationParts = location.split('-');
+  const state = locationParts[locationParts.length - 1].toUpperCase();
+  const city = locationParts.slice(0, -1).join('-');
+
+  const result = await db
+    .select()
+    .from(contractors)
+    .where(
+      and(
+        eq(contractors.status, 'active'),
+        like(contractors.city, `%${city.replace(/-/g, ' ')}%`),
+        like(contractors.state, `%${state}%`),
+        like(contractors.category, `%${category.replace(/-/g, ' ')}%`)
+      )
+    );
+
+  // Find best match by name slug
+  const match = result.find(c => {
+    const contractorSlug = generateSlug(c.businessName || c.name);
+    return contractorSlug === slug;
+  });
+
+  return match || null;
+}

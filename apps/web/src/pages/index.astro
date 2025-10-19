@@ -60,6 +60,8 @@ const featuredForDisplay = featuredContractors.map(c => ({
   category: c.category,
   description: c.description,
   location: `${c.city}, ${c.state}`,
+  city: c.city,
+  state: c.state,
   rating: parseFloat(c.rating),
   reviewCount: c.reviewCount,
   verified: c.verified,
@@ -179,6 +181,8 @@ if (!GOOGLE_MAPS_API_KEY) {
                 category={contractor.category}
                 description={contractor.description}
                 location={contractor.location}
+                city={contractor.city}
+                state={contractor.state}
                 rating={contractor.rating}
                 reviewCount={contractor.reviewCount}
                 imageUrl={contractor.imageUrl}

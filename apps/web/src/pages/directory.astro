@@ -39,6 +39,8 @@ const contractorsForDisplay = contractors.map(c => ({
   category: c.category,
   description: c.description,
   location: `${c.city}, ${c.state}`,
+  city: c.city,
+  state: c.state,
   rating: parseFloat(c.rating),
   reviewCount: c.reviewCount,
   verified: c.verified,
@@ -158,6 +160,8 @@ const allCategories = [
                 category={contractor.category}
                 description={contractor.description}
                 location={contractor.location}
+                city={contractor.city}
+                state={contractor.state}
                 rating={contractor.rating}
                 reviewCount={contractor.reviewCount}
                 imageUrl={contractor.imageUrl}

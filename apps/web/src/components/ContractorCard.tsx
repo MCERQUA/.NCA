@@ -8,6 +8,8 @@ interface ContractorCardProps {
   category: string;
   description: string;
   location: string;
+  city?: string;
+  state?: string;
   rating: number;
   reviewCount: number;
   imageUrl?: string;
@@ -23,6 +25,8 @@ export const ContractorCard: React.FC<ContractorCardProps> = ({
   category,
   description,
   location,
+  city,
+  state,
   rating,
   reviewCount,
   imageUrl,
@@ -33,6 +37,18 @@ export const ContractorCard: React.FC<ContractorCardProps> = ({
 }) => {
   // Prioritize logo for card display, fall back to general image
   const cardImage = logoUrl || imageUrl;
+
+  // Generate SEO-friendly URL
+  const generateSlug = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  };
+
+  const contractorUrl = city && state
+    ? `/${generateSlug(`${city}-${state}`)}/${generateSlug(category)}/${generateSlug(name)}`
+    : `/contractor/${id}`; // Fallback to old URL
 
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
@@ -128,12 +144,12 @@ export const ContractorCard: React.FC<ContractorCardProps> = ({
       </CardContent>
 
       <CardFooter className="flex space-x-2">
-        <a href={`/contractor/${id}`} className="flex-1">
+        <a href={contractorUrl} className="flex-1">
           <Button variant="outline" className="w-full" size="sm">
             View Profile
           </Button>
         </a>
-        <a href={`/contractor/${id}`} className="flex-1">
+        <a href={contractorUrl} className="flex-1">
           <Button className="w-full" size="sm">
             Contact
           </Button>
