@@ -261,7 +261,7 @@ const rating = contractor.rating ? parseFloat(contractor.rating) : 0;
                 <CardContent>
                   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {jobsiteImages.map((image, index) => (
-                      <div key={index} class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 hover:scale-105 transition-transform cursor-pointer">
+                      <div class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 hover:scale-105 transition-transform cursor-pointer">
                         <img
                           src={image}
                           alt={`Project ${index + 1}`}
