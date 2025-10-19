@@ -12,7 +12,7 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  output: 'static', // Static site with server-rendered API routes via adapter
+  output: 'server', // Server mode with static prerendering for pages
   adapter: netlify({
     edgeMiddleware: false,
   }),
