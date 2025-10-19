@@ -1,5 +1,6 @@
 ---
-export const prerender = true;
+// Don't prerender - this page needs to interact with server-side API routes
+export const prerender = false;
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
