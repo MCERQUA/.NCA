@@ -224,10 +224,11 @@ const rating = contractor.rating ? parseFloat(contractor.rating) : 0;
 
           <!-- Project Gallery / Portfolio -->
           {(() => {
-            // Map contractor to their image folder
-            const imageFolder = contractor.businessName === 'Insulation Contractors of Arizona'
+            // Map contractor to their image folder (case-insensitive matching)
+            const businessName = contractor.businessName || '';
+            const imageFolder = businessName.toLowerCase().includes('insulation contractors')
               ? 'ICA'
-              : contractor.businessName === 'Mrs. Spray Foam'
+              : businessName.toLowerCase().includes('spray') && businessName.toLowerCase().includes('foam')
               ? 'Mrs.Sprayfoam'
               : null;
 
