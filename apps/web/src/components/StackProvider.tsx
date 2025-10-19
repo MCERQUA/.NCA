@@ -1,5 +1,8 @@
-import { StackProvider as StackFrameworkProvider, StackTheme, StackClientApp } from "@stackframe/stack";
+import pkg from "@stackframe/stack";
 import * as React from "react";
+
+// CommonJS module compatibility - destructure from default export
+const { StackProvider: StackFrameworkProvider, StackTheme, StackClientApp } = pkg;
 
 const stackApp = new StackClientApp({
   tokenStore: "nextjs-cookie",
