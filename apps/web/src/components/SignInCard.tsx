@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StackProvider } from './StackProvider';
+import { StackAuthProvider } from './StackProvider';
 import { Card, CardContent } from './ui/Card';
 
 // Stack Auth sign-in component
@@ -131,8 +131,8 @@ function SignInForm() {
 
 export function SignInCard() {
   return (
-    <StackProvider>
+    <StackAuthProvider>
       <SignInForm />
-    </StackProvider>
+    </StackAuthProvider>
   );
 }

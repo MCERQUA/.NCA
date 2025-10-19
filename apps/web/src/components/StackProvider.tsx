@@ -1,8 +1,10 @@
-import pkg from "@stackframe/stack";
+import * as StackFramework from "@stackframe/stack";
 import * as React from "react";
 
-// CommonJS module compatibility - destructure from default export
-const { StackProvider: StackFrameworkProvider, StackTheme, StackClientApp } = pkg;
+// Use namespace import to handle dual ESM/CommonJS package
+const StackProvider = (StackFramework as any).StackProvider;
+const StackTheme = (StackFramework as any).StackTheme;
+const StackClientApp = (StackFramework as any).StackClientApp;
 
 const stackApp = new StackClientApp({
   tokenStore: "nextjs-cookie",
@@ -14,12 +16,12 @@ const stackApp = new StackClientApp({
   },
 });
 
-export function StackProvider({ children }: { children: React.ReactNode }) {
+export function StackAuthProvider({ children }: { children: React.ReactNode }) {
   return (
-    <StackFrameworkProvider app={stackApp}>
+    <StackProvider app={stackApp}>
       <StackTheme>
         {children}
       </StackTheme>
-    </StackFrameworkProvider>
+    </StackProvider>
   );
 }
