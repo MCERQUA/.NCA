@@ -28,8 +28,13 @@ export async function uploadImage(
   publicId?: string
 ): Promise<UploadResult> {
   try {
+    // Convert Buffer to base64 data URI, or use string directly
+    const uploadFile = Buffer.isBuffer(file)
+      ? `data:image/jpeg;base64,${file.toString('base64')}`
+      : file;
+
     const result = await cloudinary.uploader.upload(
-      file instanceof Buffer ? `data:image/jpeg;base64,${file.toString('base64')}` : file,
+      uploadFile,
       {
         folder,
         public_id: publicId,

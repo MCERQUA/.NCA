@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
+import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,7 +12,10 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  output: 'hybrid', // Hybrid: static by default, server-rendered for API routes
+  output: 'static', // Static site with server-rendered API routes via adapter
+  adapter: netlify({
+    edgeMiddleware: false,
+  }),
   build: {
     inlineStylesheets: 'auto',
   },
