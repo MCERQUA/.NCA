@@ -10,6 +10,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - If you attempt the same fix >5 times, you're doing it wrong
 - Update the tracking file with EVERY attempt and result
 
+## 🚨 MANDATORY DEPLOYMENT TRACKING (PERMANENT RULE)
+
+**EVERY deployment attempt MUST be documented IMMEDIATELY in `PROBLEM_TRACKING.md` BEFORE making the next attempt.**
+
+**After EVERY `git push` that triggers a Netlify deployment:**
+
+1. **WAIT for deployment to complete** - Do NOT make another change until you see the result
+2. **Document in PROBLEM_TRACKING.md**:
+   - Attempt number (increment from last)
+   - Timestamp (EST)
+   - Commit hash
+   - Action taken (what changed in netlify.toml or code)
+   - Reasoning (why you think this will work)
+   - Result (✅ or ❌ with specific error/behavior)
+   - Key deployment log excerpts (especially "X new function(s) to upload")
+3. **Test the deployed site** before making next change:
+   - `curl -I https://nationalcontractorassociation.com/` (check homepage)
+   - `curl -I https://nationalcontractorassociation.com/api/contractors` (check API)
+4. **If result is ❌, analyze WHY before trying again**
+   - Do NOT repeat the same fix
+   - Check if you're in a circular pattern
+   - If attempt count > 3 for same config, STOP and ask user
+
+**Red Flags - STOP Deploying:**
+- ⛔ Attempt count >5 for same issue
+- ⛔ You've tried the same netlify.toml config twice
+- ⛔ You're toggling between the same 2-3 configurations
+- ⛔ You don't understand why the last attempt failed
+
+**When deployment tracking shows circular pattern:**
+1. Document the circular pattern in PROBLEM_TRACKING.md
+2. Stop making changes
+3. Ask user for clarification or alternate approach
+4. Consider if the problem is elsewhere (not netlify.toml)
+
+**This rule was promoted after 8 failed deployment attempts in a circular pattern on 2025-10-19.**
+
 ## ⚠️ CRITICAL DEBUGGING PROTOCOL
 
 **WHEN SOMETHING BREAKS - READ THIS FIRST:**

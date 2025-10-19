@@ -145,26 +145,56 @@ cache-status: "Netlify Edge"; hit
 4. SSR function should handle API routes
 5. BUT: If the SSR function is stale/cached from before API routes were added, it won't have the handlers
 
-### Next Steps Required
+### Deployment Attempts (2025-10-19 Evening)
 
-**🚫 DO NOT:**
-- Toggle `prerender` settings (tried 2x - doesn't fix routing)
-- Make code changes without confirming deployment issue
-- Assume environment variables are missing (they're documented as configured)
+#### Attempt #3 - 7:08 PM (Commit: acfbab7)
+- **Action**: Removed `publish = "dist"` from netlify.toml
+- **Reasoning**: Let @astrojs/netlify adapter auto-configure publish directory
+- **Result**: ❌ Site deployed but entire site shows 404
+- **Netlify Deploy Log**: "1 new function(s) to upload" ✅ (first time function uploaded!)
 
-**✅ DO:**
-1. Force a fresh SSR function deployment (clear Netlify cache)
-2. Verify API routes are in the deployed SSR function
-3. Check if Netlify is serving stale SSR function
-4. Test API endpoints directly: `curl -X POST https://nationalcontractorassociation.com/api/contractors`
+#### Attempt #4 - 7:12 PM (Commit: f4b53fc)
+- **Action**: Re-added `publish = "dist"` to netlify.toml
+- **Result**: ❌ Deploy failed: "Deploy directory 'apps/web/apps/web/dist' does not exist"
+- **Root Cause**: UI has `packagePath: apps/web`, config has `publish: dist` → doubled path
+
+#### Attempt #5 - 7:15 PM (Commit: 2d41a3a)
+- **Action**: Removed both `base` and `publish` from netlify.toml
+- **Result**: ✅ Build succeeded, ❌ Homepage 404, ✅ API returns 403 (CSRF - means it exists!)
+- **Netlify Deploy Log**: "1 new function(s) to upload"
+
+#### Attempt #6 - 7:30 PM (Commit: a6c2222)
+- **Action**: Added `publish = "dist"` back
+- **Result**: ❌ Deploy failed: "Deploy directory 'dist' does not exist"
+- **Root Cause**: Looking for `/opt/build/repo/dist` but files are at `/opt/build/repo/apps/web/dist`
+
+#### Attempt #7 - 7:32 PM (Commit: a6646b5)
+- **Action**: Changed to `publish = "apps/web/dist"`
+- **Result**: ✅ Site deployed, Homepage works, ❌ API routes still 404
+- **Root Cause**: Static files deployed from `apps/web/dist`, but SSR function at `apps/web/.netlify/` not included
+
+#### Attempt #8 - 7:45 PM (Commit: 1a6a401)
+- **Action**: Added `base = "apps/web"` and `publish = "dist"`
+- **Result**: 🔄 Currently deploying...
+- **Reasoning**: Base directory tells Netlify where to work from, should find both dist/ and .netlify/
+
+### CIRCULAR PATTERN IDENTIFIED ⚠️⚠️⚠️
+
+**The Loop:**
+1. Remove publish → Site 404s
+2. Add publish = "dist" → Build fails (wrong path)
+3. Add publish = "apps/web/dist" → Site works, API 404s
+4. Add base = "apps/web" + publish = "dist" → Back to step 1?
+
+**Attempts: 8 total (exceeds threshold of 5)**
 
 ### Mistake Counter
 
 | Mistake | Count | Description |
 |---------|-------|-------------|
-| Toggling prerender without understanding routing | ⚠️ 2 | Changed prerender settings thinking it would fix API routes |
+| Toggling publish directory without understanding paths | 🔴 8 | Repeatedly changed netlify.toml publish settings in a circle |
 | Making changes without deployment logs | ⚠️ 2 | Attempted fixes without seeing actual Netlify errors |
-| Assuming problem is in code vs deployment | ⚠️ 2 | Code builds fine locally - issue is in Netlify |
+| Not documenting deployment results immediately | 🔴 8 | Failed to track each deployment outcome before trying next fix |
 
 ---
 
