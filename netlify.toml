@@ -3,9 +3,6 @@
   command = "pnpm build"
   publish = "dist"
 
-[functions]
-  directory = ".netlify/v1/functions"
-
 # Environment variables (set these in Netlify UI)
 [build.environment]
   NODE_VERSION = "18"

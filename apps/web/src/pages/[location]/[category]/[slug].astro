@@ -7,27 +7,35 @@ import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import { Button } from '../../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card';
-import { getContractorBySlug } from '../../../lib/db-utils';
+import { getAllContractors, generateSlug } from '../../../lib/db-utils';
 
-const { location, category, slug } = Astro.params;
+// Generate static paths at build time
+export async function getStaticPaths() {
+  try {
+    const contractors = await getAllContractors();
 
-if (!location || !category || !slug) {
-  return Astro.redirect('/directory');
+    return contractors.map((contractor) => {
+      const locationSlug = generateSlug(`${contractor.city}-${contractor.state}`);
+      const categorySlug = generateSlug(contractor.category);
+      const nameSlug = generateSlug(contractor.businessName || contractor.name);
+
+      return {
+        params: {
+          location: locationSlug,
+          category: categorySlug,
+          slug: nameSlug,
+        },
+        props: { contractor },
+      };
+    });
+  } catch (error) {
+    console.error('Error generating static paths:', error);
+    return [];
+  }
 }
 
-// Fetch contractor data using SEO-friendly URL parts
-let contractor: any = null;
-try {
-  contractor = await getContractorBySlug(location, category, slug);
-} catch (error) {
-  console.error('Error fetching contractor:', error);
-}
-
-if (!contractor) {
-  return Astro.redirect('/directory');
-}
-
-const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
+const { contractor } = Astro.props;
+const rating = contractor.rating ? parseFloat(contractor.rating) : 0;
 ---
 
 <BaseLayout
@@ -88,7 +96,7 @@ const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
                   {[...Array(5)].map((_, i) => (
                     <svg
                       class={`w-6 h-6 ${
-                        i < Math.floor(parseFloat(contractor.rating)) ? 'text-yellow-400' : 'text-gray-300'
+                        i < Math.floor(rating) ? 'text-yellow-400' : 'text-gray-300'
                       }`}
                       fill="currentColor"
                       viewBox="0 0 20 20"
@@ -97,7 +105,7 @@ const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
                     </svg>
                   ))}
                 </div>
-                <span class="text-2xl font-bold">{parseFloat(contractor.rating).toFixed(1)}</span>
+                <span class="text-2xl font-bold">{rating.toFixed(1)}</span>
                 <span class="text-slate">({contractor.reviewCount} reviews)</span>
               </div>
 
