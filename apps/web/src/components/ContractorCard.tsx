@@ -11,6 +11,7 @@ interface ContractorCardProps {
   rating: number;
   reviewCount: number;
   imageUrl?: string;
+  logoUrl?: string;
   verified?: boolean;
   specialties?: string[];
   yearsInBusiness?: number;
@@ -25,19 +26,23 @@ export const ContractorCard: React.FC<ContractorCardProps> = ({
   rating,
   reviewCount,
   imageUrl,
+  logoUrl,
   verified = false,
   specialties = [],
   yearsInBusiness,
 }) => {
+  // Prioritize logo for card display, fall back to general image
+  const cardImage = logoUrl || imageUrl;
+
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
-      {/* Company Image/Logo */}
+      {/* Company Logo/Image */}
       <div className="relative h-48 bg-gradient-to-br from-primary/10 to-primary/5 overflow-hidden">
-        {imageUrl ? (
+        {cardImage ? (
           <img
-            src={imageUrl}
-            alt={name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            src={cardImage}
+            alt={`${name} logo`}
+            className={`w-full h-full ${logoUrl ? 'object-contain p-8' : 'object-cover'} group-hover:scale-105 transition-transform duration-300`}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">

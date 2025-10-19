@@ -64,6 +64,7 @@ const featuredForDisplay = featuredContractors.map(c => ({
   specialties: c.specialties || [],
   yearsInBusiness: c.yearsInBusiness || 0,
   imageUrl: c.imageUrl || undefined,
+  logoUrl: c.logoUrl || undefined,
 }));
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -105,7 +106,7 @@ if (!GOOGLE_MAPS_API_KEY) {
 
             <!-- Search Bar -->
             <div class="max-w-4xl mx-auto mt-8">
-              <form action="/directory" method="get" class="flex flex-col sm:flex-row gap-3 bg-white/95 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-lg">
+              <form action="/directory" method="get" class="flex flex-col lg:flex-row gap-3 bg-white/95 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-lg">
                 <input
                   type="text"
                   name="category"
@@ -118,7 +119,7 @@ if (!GOOGLE_MAPS_API_KEY) {
                   placeholder="City, State, or ZIP"
                   class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base"
                 />
-                <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium text-base whitespace-nowrap">
+                <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium text-base whitespace-nowrap lg:w-auto w-full">
                   Search
                 </button>
               </form>
@@ -179,6 +180,7 @@ if (!GOOGLE_MAPS_API_KEY) {
                 rating={contractor.rating}
                 reviewCount={contractor.reviewCount}
                 imageUrl={contractor.imageUrl}
+                logoUrl={contractor.logoUrl}
                 verified={contractor.verified}
                 specialties={contractor.specialties}
                 yearsInBusiness={contractor.yearsInBusiness}

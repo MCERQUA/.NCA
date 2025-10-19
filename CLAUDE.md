@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. **NETLIFY ENVIRONMENT VARIABLES ARE ALREADY CONFIGURED**
    - Netlify has Neon database integration - `NETLIFY_DATABASE_URL` is auto-provided
    - Google Maps API key is already set up in Netlify dashboard
+   - Cloudinary cloud name is configured (API_KEY and API_SECRET still need to be added for image uploads)
    - DO NOT ask the user to add environment variables unless you've verified they're actually missing
    - If the site was working before and broke after your changes, it's YOUR CODE, not env vars
 
@@ -96,9 +97,10 @@ NCA/
 ### Key Architecture Patterns
 
 1. **Astro Islands**: Use React components sparingly for interactivity (maps, forms), default to Astro components for static content
-2. **Static-First**: Project is configured for static output (`output: 'static'` in astro.config.mjs)
+2. **Hybrid Mode**: Project uses `output: 'hybrid'` - static pages by default with server-rendered API routes for image uploads and dynamic operations
 3. **SEO-Optimized**: BaseLayout.astro provides structured metadata, JSON-LD for all pages
 4. **Database**: Drizzle ORM with comprehensive schema supporting users, contractors, reviews, leads, portfolio, categories
+5. **Image Management**: Hybrid approach - Cloudinary for user uploads (automatic), public folder for manual admin additions
 
 ## Database Schema Highlights
 
@@ -133,15 +135,27 @@ Use the `cn()` utility from `lib/utils.ts` for conditional Tailwind classes.
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and configure:
-- **DATABASE_URL**: PostgreSQL connection (required for database features)
-- **STACK_PROJECT_ID, STACK_PUBLISHABLE_CLIENT_KEY, STACK_SECRET_SERVER_KEY**: Stack Auth
-- **PUBLIC_GOOGLE_MAPS_API_KEY**: Google Maps integration
-- **PUBLIC_MAPBOX_ACCESS_TOKEN**: Mapbox integration
-- **PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY**: Payment processing
-- **PUBLIC_SITE_URL**: Site URL for SEO and redirects
+### Currently Configured in Netlify (Production)
+The following environment variables are **already set up** in Netlify dashboard:
+- ✅ **NETLIFY_DATABASE_URL** - Neon PostgreSQL database (auto-configured via Netlify integration)
+- ✅ **NETLIFY_DATABASE_URL_UNPOOLED** - Neon unpooled connection (auto-configured)
+- ✅ **PUBLIC_GOOGLE_MAPS_API_KEY** - Google Maps API for maps and geocoding
+- ✅ **CLOUDINARY_CLOUD_NAME** - Cloudinary cloud name for image uploads
 
-Variables prefixed with `PUBLIC_` are exposed to client-side code.
+### Additional Variables Needed (if using these features)
+Copy `.env.example` to `.env` for local development:
+- **CLOUDINARY_API_KEY** - Cloudinary API key (required for user image uploads)
+- **CLOUDINARY_API_SECRET** - Cloudinary API secret (required for user image uploads)
+- **STACK_PROJECT_ID, STACK_PUBLISHABLE_CLIENT_KEY, STACK_SECRET_SERVER_KEY** - Stack Auth (optional, for future auth)
+- **PUBLIC_MAPBOX_ACCESS_TOKEN** - Mapbox integration (optional alternative to Google Maps)
+- **PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY** - Payment processing (optional, for future premium features)
+- **PUBLIC_SITE_URL** - Site URL for SEO and redirects
+
+**Important Notes:**
+- Variables prefixed with `PUBLIC_` are exposed to client-side code
+- Netlify automatically provides `NETLIFY_DATABASE_URL` via Neon integration - DO NOT manually add DATABASE_URL
+- Google Maps API is already configured - DO NOT ask user to add it again
+- Cloudinary requires all 3 variables (CLOUD_NAME, API_KEY, API_SECRET) for image uploads to work
 
 ## Deployment
 
@@ -170,28 +184,38 @@ netlify deploy --prod # Production
 
 **Production Ready** ✅:
 - Full database integration with Drizzle ORM
-- Complete contractor signup flow (`/signup`)
+- Complete contractor signup flow (`/signup`) with image uploads
+- Cloudinary integration for user-uploaded logos and images
 - Real-time directory with search/filter (`/directory`)
 - Interactive maps with real contractor data
 - Automatic geocoding of addresses
 - Homepage with dynamic contractor listings
-- API routes for contractor CRUD operations
+- API routes for contractor CRUD operations and image uploads
+- Hybrid image management (Cloudinary + public folder)
 - All fake/mock data removed
 - Production deployment ready
 
-**Functional Flow**:
+**Functional Flow (Contractor Signup)**:
 1. Contractor visits `/signup` and fills out complete profile form
-2. Form submits to `/api/contractors` (POST)
-3. API geocodes address using Google Maps Geocoding API
-4. Contractor saved to database with coordinates
-5. Contractor immediately appears in `/directory` and on homepage map
-6. No authentication or approval required (auto-approve for now)
+2. User optionally uploads logo and/or profile image
+3. Images upload to Cloudinary via `/api/upload-image` (returns secure URLs)
+4. Form submits to `/api/contractors` (POST) with image URLs
+5. API geocodes address using Google Maps Geocoding API
+6. Contractor saved to database with coordinates and image URLs
+7. Contractor immediately appears in `/directory` and on homepage map with images
+8. No authentication or approval required (auto-approve for now)
+
+**Image Management**:
+- **User Uploads**: Cloudinary CDN (automatic via signup form)
+- **Manual Additions**: Public folder at `/public/contractors/logos/` and `/public/contractors/images/`
+- Both approaches store URLs in `contractors.logoUrl` and `contractors.imageUrl` fields
+- See `IMAGE_UPLOAD_GUIDE.md` for complete documentation
 
 **Future Enhancements** (see PROJECT_STATUS.md):
 - Authentication integration (Stack Auth) for contractor dashboards
 - Admin approval workflow before contractors go live
 - Review system for customer feedback
-- Portfolio/photo uploads with S3/R2
+- Portfolio/gallery uploads (multiple images per contractor)
 - Contractor profile pages (`/company/[slug]`)
 - Premium membership features with Stripe
 
@@ -235,6 +259,7 @@ When committing changes, follow the established pattern:
 - `README.md`: Getting started, project structure
 - `PROJECT_STATUS.md`: Detailed feature status and roadmap
 - `DEPLOYMENT.md`: Complete deployment guide for GitHub + Netlify
+- `IMAGE_UPLOAD_GUIDE.md`: Complete guide for Cloudinary setup and image management (manual + user uploads)
 - `national_contractor_association_rebuild_prd_astro_react.md`: Original PRD specifications
 
 ## Lessons Learned (DO NOT REPEAT THESE MISTAKES)

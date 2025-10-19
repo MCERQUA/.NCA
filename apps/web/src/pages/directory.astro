@@ -43,6 +43,7 @@ const contractorsForDisplay = contractors.map(c => ({
   specialties: c.specialties || [],
   yearsInBusiness: c.yearsInBusiness || 0,
   imageUrl: c.imageUrl || undefined,
+  logoUrl: c.logoUrl || undefined,
 }));
 
 // Get unique categories from database for filter
@@ -158,6 +159,7 @@ const allCategories = [
                 rating={contractor.rating}
                 reviewCount={contractor.reviewCount}
                 imageUrl={contractor.imageUrl}
+                logoUrl={contractor.logoUrl}
                 verified={contractor.verified}
                 specialties={contractor.specialties}
                 yearsInBusiness={contractor.yearsInBusiness}

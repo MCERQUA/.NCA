@@ -11,7 +11,7 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  output: 'static', // Pure static build
+  output: 'hybrid', // Hybrid: static by default, server-rendered for API routes
   build: {
     inlineStylesheets: 'auto',
   },
