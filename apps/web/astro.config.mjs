@@ -15,6 +15,7 @@ export default defineConfig({
   output: 'server', // Server mode with static prerendering for pages
   adapter: netlify({
     edgeMiddleware: false,
+    functionPerRoute: false, // Use single SSR function for all routes
   }),
   build: {
     inlineStylesheets: 'auto',

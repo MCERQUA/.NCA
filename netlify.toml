@@ -3,11 +3,6 @@
   command = "pnpm build"
   publish = "dist"
 
-# Functions directory - Astro adapter generates at .netlify/v1/functions
-[functions]
-  directory = ".netlify/v1/functions"
-  node_bundler = "none"
-
 # Environment variables (set these in Netlify UI)
 [build.environment]
   NODE_VERSION = "18"
