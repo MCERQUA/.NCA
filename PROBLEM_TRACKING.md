@@ -60,7 +60,7 @@ Possible causes:
 3. Netlify's CDN caching 404 responses
 4. Base directory mismatch in netlify.toml vs deployment
 
-### Deployment Log Analysis (2025-10-19 12:52 PM)
+### Deployment Log Analysis #1 (2025-10-19 12:52 PM)
 
 **Build Output:**
 ```
@@ -70,14 +70,75 @@ Possible causes:
 ⚠️ Deploy shows: "0 new file(s) to upload" and "0 new function(s) to upload"
 ```
 
-**Critical Finding:**
-The deployment says "0 new function(s) to upload" - meaning Netlify is using the CACHED SSR function from a previous deployment, not the newly built one.
+**Finding:** Netlify using cached SSR function.
+
+### Deployment Log Analysis #2 (2025-10-19 12:59 PM) - AFTER CACHE CLEAR
+
+**Build Output:**
+```
+✅ Building without cache: "12:59:07 PM: Building without cache"
+✅ Fresh clone: "12:59:07 PM: No cached dependencies found. Cloning fresh repo"
+✅ Build successful: "17:00:31 [build] Complete!"
+✅ SSR Function generated: "17:00:31 [@astrojs/netlify] Generated SSR Function"
+❌ STILL says: "1:00:36 PM: 0 new function(s) to upload"
+```
+
+**CRITICAL FINDING:**
+Even with a COMPLETE cache clear and fresh build, Netlify says "0 new function(s) to upload". This means:
+1. The SSR function was built successfully
+2. But Netlify's deployment system thinks the function is IDENTICAL to what's already deployed
+3. The function content hash hasn't changed between builds
+
+**This suggests the API routes were NEVER added to the SSR function, or they're being excluded somehow.**
 
 **Redirects Configuration:**
 - `_redirects` file exists: `/* /.netlify/functions/ssr 200`
 - This should route all non-static requests to the SSR function
 
-**Hypothesis:**
+### 🎯 ROOT CAUSE FOUND (2025-10-19 1:07 PM EST)
+
+**The Problem:**
+```toml
+# netlify.toml
+[build]
+  publish = "dist"  ← WRONG! This only deploys static files
+```
+
+**What Actually Happens:**
+1. ✅ Astro builds SSR function to `.netlify/build/entry.mjs` (includes all API routes)
+2. ✅ Astro builds static files to `dist/`
+3. ❌ Netlify only deploys `dist/` (because publish = "dist")
+4. ❌ SSR function at `.netlify/build/` is NEVER deployed
+5. ❌ `_redirects` points to `/.netlify/functions/ssr` which doesn't exist
+6. ❌ Result: 404 errors cached at edge
+
+**The Fix:**
+Remove `publish = "dist"` from netlify.toml. The @astrojs/netlify adapter automatically configures the correct publish directories when using `output: 'server'`.
+
+**Verification:**
+```bash
+# Local build shows SSR function exists with API routes
+$ cat apps/web/.netlify/build/entry.mjs | grep "api/"
+const _page1 = () => import('./pages/api/contractors.astro.mjs');
+const _page3 = () => import('./pages/api/upload-image.astro.mjs');
+
+# But dist folder has no .netlify directory
+$ ls apps/web/dist/.netlify/
+No such file or directory
+
+# The deployed site returns 404 from edge cache
+$ curl -I https://nationalcontractorassociation.com/api/contractors
+HTTP/2 404
+cache-status: "Netlify Edge"; hit
+```
+
+**Why This Wasn't Obvious:**
+- Local `.netlify/build/` folder shows API routes exist
+- Build logs say "Generated SSR Function" (TRUE - but it's not deployed)
+- Netlify says "0 new functions to upload" (TRUE - because publish dir excludes them)
+- The build succeeds (TRUE - the function was built, just not deployed)
+
+**OLD Hypothesis (INCORRECT):**
 1. Static `/signup/index.html` exists and loads fine ✅
 2. JavaScript in signup page tries to POST to `/api/upload-image` and `/api/contractors`
 3. These requests should be caught by `/* /.netlify/functions/ssr 200` redirect
