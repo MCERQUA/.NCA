@@ -11,6 +11,10 @@
   SECRETS_SCAN_OMIT_KEYS = "PUBLIC_GOOGLE_MAPS_API_KEY"
   SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
 
+# Disable automatic image optimization (we're using local static images)
+[images]
+  remote_images = []
+
 # Headers for security and performance
 [[headers]]
   for = "/*"
