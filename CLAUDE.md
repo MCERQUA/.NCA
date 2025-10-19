@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📋 PROBLEM TRACKING
+
+**BEFORE debugging any issue, check: `PROBLEM_TRACKING.md`**
+- All active issues are tracked with attempt history
+- Mistake counters prevent repeating the same failed approaches
+- If you attempt the same fix >5 times, you're doing it wrong
+- Update the tracking file with EVERY attempt and result
+
 ## ⚠️ CRITICAL DEBUGGING PROTOCOL
 
 **WHEN SOMETHING BREAKS - READ THIS FIRST:**
