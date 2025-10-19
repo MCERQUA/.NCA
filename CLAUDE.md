@@ -97,7 +97,7 @@ NCA/
 ### Key Architecture Patterns
 
 1. **Astro Islands**: Use React components sparingly for interactivity (maps, forms), default to Astro components for static content
-2. **Hybrid Mode**: Project uses `output: 'hybrid'` - static pages by default with server-rendered API routes for image uploads and dynamic operations
+2. **Static Site Generation**: Project uses `output: 'static'` - all pages are prerendered at build time. Use `client:only="react"` for components that require runtime browser context (auth, cookies)
 3. **SEO-Optimized**: BaseLayout.astro provides structured metadata, JSON-LD for all pages
 4. **Database**: Drizzle ORM with comprehensive schema supporting users, contractors, reviews, leads, portfolio, categories
 5. **Image Management**: Hybrid approach - Cloudinary for user uploads (automatic), public folder for manual admin additions
@@ -303,3 +303,98 @@ Check in this order:
 3. `import.meta.env.*` (Astro's env handling)
 
 DO NOT use `dotenv` to load from `.env` files - Netlify injects environment variables directly into `process.env`.
+
+### Third-Party Library Integration (CRITICAL - LEARNED FROM 15+ FAILED DEPLOYMENTS)
+
+**The Problem:**
+Stack Auth was integrated without checking compatibility with Astro's static site generation. This caused a cascade of 15+ deployment failures due to fundamental incompatibility issues.
+
+**RED FLAGS - Check These BEFORE Integrating Any Library:**
+
+1. **Is it designed for your framework?**
+   - Stack Auth is built for Next.js (app router, server components, request context)
+   - It expects runtime request handling (cookies, headers) not available during static builds
+   - ❌ **WRONG**: Assuming a React library will "just work" with Astro
+   - ✅ **CORRECT**: Check library docs for Astro/SSG compatibility first
+
+2. **Does it require runtime request context?**
+   - Libraries that access cookies, headers, or session during component initialization will fail in SSG
+   - Error signature: `"cookies/headers was called outside a request scope"`
+   - **Solution**: Use `client:only="react"` directive to skip SSR entirely
+
+3. **ESM vs CommonJS package issues:**
+   - Modern packages may export dual formats causing build-time conflicts
+   - Error signature: `"Unexpected token 'export'"` or `"default is not exported"`
+   - **Solution**: Add to Vite's `ssr.noExternal` config to force bundling
+
+**Stack Auth Specific Issues Encountered:**
+
+1. **TypeScript API Changes** (v2 → v3)
+   - Old API: Pass `projectId` and `publishableClientKey` as props
+   - New API: Create `StackClientApp` instance and pass via `app` prop
+   - **Fix**: Updated to v3 API with proper initialization
+
+2. **CommonJS/ESM Dual Package Hazard**
+   - Package behaves differently in server build (CommonJS) vs client build (ESM)
+   - **Fix**: Use namespace import: `import * as StackFramework from "@stackframe/stack"`
+   - **Fix**: Add to `vite.ssr.noExternal` to force bundling
+
+3. **Environment Variable Initialization**
+   - Library throws if project ID not found, even when feature is optional
+   - **Fix**: Conditional initialization with graceful degradation
+   - **Fix**: Use Astro's `import.meta.env.*` not `process.env.*`
+
+4. **Request Context During Static Build**
+   - StackClientApp tries to access cookies during SSR/prerendering
+   - This is fundamentally incompatible with static site generation
+   - **Fix**: Use `client:only="react"` instead of `client:load` to skip SSR
+
+**Correct Approach for Auth in Static Sites:**
+
+```astro
+---
+// signin.astro
+export const prerender = true;
+import { SignInCard } from '../components/SignInCard';
+---
+
+<!-- ❌ WRONG: client:load tries to SSR during build -->
+<SignInCard client:load />
+
+<!-- ✅ CORRECT: client:only skips SSR, only renders in browser -->
+<SignInCard client:only="react" />
+```
+
+**Astro Client Directives - When to Use:**
+
+- `client:load` - Hydrate immediately on page load (component SSRs during build)
+- `client:idle` - Hydrate when browser idle (component SSRs during build)
+- `client:visible` - Hydrate when scrolled into view (component SSRs during build)
+- `client:only="react"` - **SKIP SSR entirely**, only render in browser (use for auth, cookies, request context)
+
+**Before Integrating ANY Third-Party Library:**
+
+1. ✅ Check official docs for framework compatibility
+2. ✅ Search for "astro [library-name]" to see if others have succeeded
+3. ✅ Look for runtime dependencies (cookies, headers, session, request)
+4. ✅ Test locally with `pnpm build` (not just `pnpm dev`) BEFORE committing
+5. ✅ Consider if the feature actually needs SSR or can be client-only
+
+**When You Break the Build:**
+
+1. **Don't make confident claims** about "should work" until you see actual build logs
+2. **Read the error carefully** - it usually tells you exactly what's wrong
+3. **Consider removing the feature** if it causes cascading issues (auth can be added later)
+4. **Use `client:only`** as a first attempt for problematic React components
+5. **Check Vite config** for ESM/CommonJS bundling issues (`ssr.noExternal`)
+
+**Why This Matters:**
+
+The Stack Auth integration attempt caused 15+ consecutive deployment failures because we didn't verify compatibility upfront. Each "fix" revealed a new incompatibility. The correct solution was identified on attempt #16: use `client:only` to skip SSR entirely, since auth components inherently need runtime request context that SSG cannot provide.
+
+**Current Stack Auth Status:**
+
+- ✅ Builds successfully with `client:only="react"` directive
+- ✅ Environment variables are optional (graceful degradation if not configured)
+- ✅ Component only renders in browser where request context exists
+- ⚠️ **IMPORTANT**: If Stack Auth continues causing issues, remove it entirely - the core contractor directory does NOT need authentication to function
