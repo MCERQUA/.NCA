@@ -21,5 +21,9 @@ export default defineConfig({
     optimizeDeps: {
       exclude: ['@astrojs/react'],
     },
+    ssr: {
+      // Bundle @stackframe/stack for SSR to avoid ESM/CommonJS conflicts
+      noExternal: ['@stackframe/stack'],
+    },
   },
 });
