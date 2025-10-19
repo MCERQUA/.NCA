@@ -1,6 +1,6 @@
 [build]
   command = "pnpm build"
-  publish = "dist"
+  publish = "apps/web/dist"
 
 # Environment variables (set these in Netlify UI)
 [build.environment]
