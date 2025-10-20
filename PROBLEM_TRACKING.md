@@ -541,6 +541,72 @@ The cache headers will prevent FUTURE caching issues, but won't clear the EXISTI
 
 **THE PROBLEM:** Netlify's edge cache has a TTL (time-to-live) on the stale 404. Cache headers prevent NEW caching but don't clear OLD cache. Must wait for natural expiration (could be minutes to hours).
 
+**UPDATE:** Cache cleared around 9:50 PM (`cache-status: fwd=miss`) but API still returned 404!
+
+#### Attempt #18 - 9:52 PM (Fix adapter config - preferStatic issue)
+- **Action**: Configured netlify adapter with `edgeMiddleware: false` in `astro.config.mjs`
+- **Reasoning**: Function logs showed ZERO entries after cache clear, meaning requests weren't reaching function
+- **Root Cause #2 FOUND**: SSR function had `preferStatic: true` config, causing Netlify to serve static 404 instead of routing to function
+- **Evidence**:
+  - Cache cleared (`fwd=miss`) but still 404
+  - Function logs: No entries for user's 9:50 PM test
+  - SSR function config: `preferStatic: true` at line 10
+  - Netlify serving its default 404 page for `/api/*`
+- **Fix**: Added `edgeMiddleware: false` to netlify adapter config
+- **Commit**: `f459fe7`
+- **Files Changed**:
+  - `apps/web/astro.config.mjs`: Added adapter configuration
+  - `PROBLEM_TRACKING.md`: Updated with findings
+- **Result**: ❌ FAILED - `edgeMiddleware: false` did NOT change `preferStatic: true` in deployed function
+- **Deployment completed**: 10:05:58 PM
+- **Post-deployment check**:
+  - SSR function at `apps/web/.netlify/v1/functions/ssr/ssr.mjs` still has `preferStatic: true` at line 10
+  - API routes still return 404
+  - Function logs still show no new entries
+
+#### Attempt #19 - 10:07 PM (Force API routing with redirects in netlify.toml)
+- **Action**: Added `[[redirects]]` rule in `netlify.toml` with `force = true` for `/api/*` routes
+- **Reasoning**: `preferStatic: true` causes Netlify to check static files first; need to override this behavior for API routes
+- **The Solution Attempted**:
+  ```toml
+  [[redirects]]
+    from = "/api/*"
+    to = "/.netlify/functions/ssr"
+    status = 200
+    force = true  # ← KEY: Overrides preferStatic
+  ```
+- **Commit**: `b10dc99`
+- **Files Changed**:
+  - `netlify.toml`: Added forced redirect rule for `/api/*`
+- **Result**: ❌ FAILED - netlify.toml redirects don't override Functions v2 config.path behavior
+- **Deployment completed**: ~10:12 PM
+- **Test Results**:
+  - API still returns 404 with Netlify's default HTML error page
+  - No redirect happening (no location header)
+  - Cache headers working correctly
+- **Why It Failed**:
+  - `[[redirects]]` in netlify.toml has lower priority than Functions v2 built-in routing
+  - Function's `config.path: '/*'` with `preferStatic: true` takes precedence
+  - Need to use `_redirects` file with force flag instead
+
+#### Attempt #20 - 10:14 PM (Force API routing in _redirects file)
+- **Action**: Added forced redirect in `public/_redirects` file with `!` (force) flag
+- **Reasoning**: `_redirects` file has higher priority than netlify.toml and can override Functions v2 preferStatic behavior
+- **The Solution**:
+  ```
+  /api/* /.netlify/functions/ssr 200!  ← Force flag (!) overrides preferStatic
+  /* /.netlify/functions/ssr 200       ← Existing catch-all
+  ```
+- **Why This Should Work**:
+  - `_redirects` file is processed before function's built-in routing config
+  - `200!` (force flag) tells Netlify to ALWAYS use this redirect
+  - Specific `/api/*` rule comes before catch-all `/*` (priority order)
+  - Force flag should override `preferStatic: true` for API routes
+- **Commit**: `a853ff7`
+- **Files Changed**:
+  - `apps/web/public/_redirects`: Added forced /api/* rule
+- **Result**: (Building - Deployment #20 in progress)
+
 ---
 
 ## 📊 FINAL DIAGNOSIS SUMMARY
