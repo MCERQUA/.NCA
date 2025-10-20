@@ -605,7 +605,102 @@ The cache headers will prevent FUTURE caching issues, but won't clear the EXISTI
 - **Commit**: `a853ff7`
 - **Files Changed**:
   - `apps/web/public/_redirects`: Added forced /api/* rule
-- **Result**: (Building - Deployment #20 in progress)
+- **Result**: ❌ FAILED - Force flag in _redirects also doesn't override preferStatic
+- **Deployment completed**: ~10:15 PM
+- **Test Results**:
+  - API still returns 404 with Netlify's default HTML error page
+  - Cache status shows `fwd=miss` (cache cleared)
+  - No redirect happening
+- **Why It Failed**:
+  - Even `_redirects` file with force flag can't override Functions v2 `preferStatic: true`
+  - Netlify checks static files first due to function config, before processing redirects
+
+#### Attempt #21 - 10:17 PM (Use functionPerRoute adapter option)
+- **Action**: Added `functionPerRoute: true` to netlify adapter in `astro.config.mjs`
+- **Reasoning**: Create individual functions per route instead of monolithic SSR function; separate functions shouldn't have `preferStatic` setting
+- **The Solution**:
+  ```javascript
+  adapter: netlify({
+    edgeMiddleware: false,
+    functionPerRoute: true,  // ← Create separate function per route
+  })
+  ```
+- **Why This Should Work**:
+  - `functionPerRoute: true` creates individual functions for each route
+  - Separate API route functions shouldn't have `preferStatic: true`
+  - Cleaner separation avoids routing conflicts
+  - Recommended pattern in Astro docs
+- **Commit**: `fed6173`
+- **Files Changed**:
+  - `apps/web/astro.config.mjs`: Added functionPerRoute option
+  - `PROBLEM_TRACKING.md`: Updated tracking
+- **Result**: ❌ FAILED - Still generated single function with `preferStatic: true`
+- **Deployment completed**: ~10:19 PM
+- **Post-build verification**:
+  - Local build still shows: `[@astrojs/netlify] Generated SSR Function` (singular)
+  - Only one function directory: `apps/web/.netlify/v1/functions/ssr/`
+  - Function still has `preferStatic: true` at line 10
+  - No individual per-route functions created
+- **Test Results**:
+  - API still returns 404
+  - No change in behavior
+- **Why It Failed**:
+  - @astrojs/netlify adapter v6.5.13 may not fully implement functionPerRoute
+  - OR functionPerRoute only applies to prerendered routes, not SSR routes
+  - Setting had no effect on build output
+
+---
+
+## 🚨 CURRENT STATUS (2025-10-20 2:20 AM EST)
+
+### Problem Summary
+
+After 21 deployment attempts, the API routes continue to return 404 errors. The root cause has been identified but not resolved:
+
+**Root Cause**: The @astrojs/netlify adapter (v6.5.13) generates an SSR function with `preferStatic: true` configuration, which tells Netlify to serve static files (including 404 pages) before routing to the function. This blocks all `/api/*` requests.
+
+### What We've Tried (All Failed)
+
+1. ❌ **Attempt #18**: `edgeMiddleware: false` adapter option - didn't affect `preferStatic`
+2. ❌ **Attempt #19**: `[[redirects]]` in netlify.toml with `force = true` - ignored by Netlify
+3. ❌ **Attempt #20**: `_redirects` file with `200!` force flag - also ignored
+4. ❌ **Attempt #21**: `functionPerRoute: true` adapter option - still generated single function with `preferStatic: true`
+
+### Why These Approaches Failed
+
+- The `preferStatic: true` setting is hardcoded in the @astrojs/netlify adapter's function generation
+- Netlify's routing priority: Function config > Redirects > Everything else
+- No documented adapter option to disable `preferStatic`
+- Redirect rules (both netlify.toml and _redirects) are processed AFTER function config checks
+
+### Remaining Options
+
+1. **Post-build script to modify function** (Most feasible)
+   - Add build script to remove `preferStatic: true` line from generated function
+   - Modify `apps/web/.netlify/v1/functions/ssr/ssr.mjs` after build
+   - Pro: Direct fix to root cause
+   - Con: Brittle if adapter changes output format
+
+2. **Downgrade @astrojs/netlify adapter**
+   - Try older version that might not have `preferStatic: true`
+   - Pro: Might work without workarounds
+   - Con: May lose other features or have different bugs
+
+3. **Switch to Vercel adapter**
+   - Try `@astrojs/vercel` instead of `@astrojs/netlify`
+   - Pro: Different adapter may not have this issue
+   - Con: Requires Vercel account and full migration
+
+4. **Contact Netlify/Astro support**
+   - Report as potential bug in adapter
+   - Pro: Proper long-term solution
+   - Con: Slow, no guarantee of fix
+
+### Next Action Required
+
+**User decision needed**: Which approach should we try next?
+
+**Recommended**: Post-build script (Option #1) - fastest path to working solution.
 
 ---
 
