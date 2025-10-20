@@ -185,15 +185,19 @@ cache-status: "Netlify Edge"; hit
   - `curl -I /` → HTTP 200 ✅
   - `curl -I /api/contractors` → HTTP 404 ❌
 
-### 📋 CURRENT NETLIFY UI SETTINGS (as of 2025-10-19 8:05 PM)
+### 📋 CURRENT NETLIFY UI SETTINGS (as of 2025-10-19 8:15 PM)
 
 ```
-Base directory:      (not set)
+Base directory:      /
 Package directory:   apps/web
 Build command:       pnpm build
-Publish directory:   Not set
-Functions directory: .netlify/functions-internal  ← CHANGED from netlify/functions
+Publish directory:   apps/web/dist  ← FULL PATH from repo root
+Functions directory: apps/web/.netlify/functions-internal  ← FULL PATH from repo root
 ```
+
+**CRITICAL DISCOVERY (from attempt #10):**
+Package directory does NOT apply to Publish/Functions directories! All paths resolve from repo root independently.
+Must specify FULL paths: `apps/web/dist` and `apps/web/.netlify/functions-internal`
 
 **netlify.toml Current Config:**
 ```toml
@@ -234,6 +238,34 @@ These are **sibling directories**. But Netlify's `publish` setting can only depl
 **The Netlify UI setting `packagePath: apps/web` is also interfering.**
 
 **Attempts: 8/8 failed - All variations tested**
+
+#### Attempt #9 - 8:06 PM (Commit: 3d75a82)
+- **Action**: Removed `base` and `publish` from netlify.toml, fixed Functions directory in UI to `.netlify/functions-internal`
+- **Reasoning**: Deployment #5 uploaded function successfully, fixing functions dir might allow both to work
+- **Netlify UI Changes**: Functions directory: `netlify/functions` → `.netlify/functions-internal`
+- **Result**: ❌ EVERYTHING 404 (homepage and API both fail)
+- **Test Results**:
+  - `curl -I /` → HTTP 404 ❌
+  - `curl -I /api/contractors` → HTTP 404 ❌
+- **Same as deployment #5 - Netlify can't find static files without publish directory**
+
+**Attempts: 9/9 failed**
+
+#### Attempt #10 - 8:10 PM (Manual redeploy, no commit)
+- **Action**: Set Publish directory in UI to `dist`
+- **Reasoning**: UI package directory + publish directory should combine to find files
+- **Netlify UI**: Publish directory set to `dist`, Functions directory = `.netlify/functions-internal`
+- **Result**: ❌ Deploy failed - "Deploy directory 'dist' does not exist"
+- **Deployment Log**:
+  - `publish: /opt/build/repo/dist` ← Looking at WRONG PATH
+  - `functionsDirectory: /opt/build/repo/.netlify/functions-internal` ← Also WRONG
+  - Actual files are at: `/opt/build/repo/apps/web/dist/` and `/opt/build/repo/apps/web/.netlify/`
+- **Root Cause**: UI's "Package directory" does NOT apply to "Publish directory" or "Functions directory" paths!
+
+**KEY FINDING:**
+The Package directory setting (`apps/web`) is NOT prefixed to the Publish/Functions directory settings. They're all resolved from repo root independently.
+
+**Attempts: 10/10 failed - THRESHOLD EXCEEDED**
 
 ### CIRCULAR PATTERN IDENTIFIED ⚠️⚠️⚠️
 
