@@ -185,14 +185,14 @@ cache-status: "Netlify Edge"; hit
   - `curl -I /` → HTTP 200 ✅
   - `curl -I /api/contractors` → HTTP 404 ❌
 
-### 📋 CURRENT NETLIFY UI SETTINGS (as of 2025-10-19 8:00 PM)
+### 📋 CURRENT NETLIFY UI SETTINGS (as of 2025-10-19 8:05 PM)
 
 ```
-Base directory:      /
+Base directory:      (not set)
 Package directory:   apps/web
 Build command:       pnpm build
 Publish directory:   Not set
-Functions directory: netlify/functions
+Functions directory: .netlify/functions-internal  ← CHANGED from netlify/functions
 ```
 
 **netlify.toml Current Config:**
