@@ -11,6 +11,13 @@
 
 # Disable Netlify Image CDN completely (we serve static images directly)
 
+# CRITICAL: Prevent caching of API routes
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate, max-age=0"
+    CDN-Cache-Control = "no-store"
+
 # Headers for security and performance
 [[headers]]
   for = "/*"
