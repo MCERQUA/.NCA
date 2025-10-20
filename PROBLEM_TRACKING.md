@@ -175,8 +175,65 @@ cache-status: "Netlify Edge"; hit
 
 #### Attempt #8 - 7:45 PM (Commit: 1a6a401)
 - **Action**: Added `base = "apps/web"` and `publish = "dist"`
-- **Result**: 🔄 Currently deploying...
+- **Result**: ❌ Site works (HTTP 200), API still 404
 - **Reasoning**: Base directory tells Netlify where to work from, should find both dist/ and .netlify/
+- **Deployment Log**:
+  - Build: `[@astrojs/netlify] Generated SSR Function` ✅
+  - Deploy: `Starting to deploy site from 'apps/web/dist'`
+  - Deploy: `0 new function(s) to upload` ❌ **SSR FUNCTION NOT DEPLOYED**
+- **Test Results**:
+  - `curl -I /` → HTTP 200 ✅
+  - `curl -I /api/contractors` → HTTP 404 ❌
+
+### 📋 CURRENT NETLIFY UI SETTINGS (as of 2025-10-19 8:00 PM)
+
+```
+Base directory:      /
+Package directory:   apps/web
+Build command:       pnpm build
+Publish directory:   Not set
+Functions directory: netlify/functions
+```
+
+**netlify.toml Current Config:**
+```toml
+[build]
+  base = "apps/web"
+  command = "pnpm build"
+  publish = "dist"
+```
+
+**Combined Effect:**
+- Netlify works from package directory: `apps/web`
+- netlify.toml sets base: `apps/web` (redundant with UI)
+- netlify.toml sets publish: `dist`
+- Final deploy path: `apps/web/dist` (static files only)
+- SSR function at `apps/web/.netlify/` is NOT deployed
+
+### 🛑 STOPPING - FUNDAMENTAL ARCHITECTURE ISSUE IDENTIFIED
+
+**The Real Problem:**
+
+Astro's `output: 'server'` mode with @astrojs/netlify adapter creates:
+```
+apps/web/
+├── dist/          ← Static files (HTML, CSS, JS, images)
+└── .netlify/      ← SSR function
+    └── build/
+        └── entry.mjs (contains API routes)
+```
+
+These are **sibling directories**. But Netlify's `publish` setting can only deploy ONE directory.
+
+**Why every attempt failed:**
+- `publish = "dist"` → Deploys only `apps/web/dist/`, excludes `.netlify/` → No SSR function
+- `publish = "apps/web/dist"` → Same result, different path
+- No publish setting → Netlify can't find files → 404 everywhere
+- `base = "apps/web"` + `publish = "dist"` → Deploys only `dist/`, excludes `.netlify/` → No SSR function
+
+**The Netlify UI setting `packagePath: apps/web` is also interfering.**
+
+**Attempts: 8/8 failed - All variations tested**
 
 ### CIRCULAR PATTERN IDENTIFIED ⚠️⚠️⚠️
 
