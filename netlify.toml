@@ -11,13 +11,6 @@
 
 # Disable Netlify Image CDN completely (we serve static images directly)
 
-# CRITICAL: Force API routes to SSR function (bypasses preferStatic)
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/ssr"
-  status = 200
-  force = true
-
 # CRITICAL: Prevent caching of API routes
 [[headers]]
   for = "/api/*"
