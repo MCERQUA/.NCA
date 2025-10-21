@@ -1,0 +1,5 @@
+# API routes - explicitly route to SSR function (bypasses Netlify Forms)
+/api/*  /.netlify/functions/ssr  200
+
+# Everything else to SSR function
+/*  /.netlify/functions/ssr  200
