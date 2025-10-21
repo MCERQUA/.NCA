@@ -9,12 +9,13 @@
 ## 🟡 ACTIVE ISSUE #1: Signup Form API 404 Errors
 
 **Issue ID**: `SIGNUP-API-404`
-**Status**: FIX DEPLOYED - Awaiting Cache Purge
+**Status**: IN PROGRESS - Deploying base directory fix
 **Started**: 2025-10-19
-**Resolved**: 2025-10-19 (Deployment #16)
+**Last Updated**: 2025-10-21 17:08 EST
 **Symptom**: Signup form returns "Error Creating Profile" with 404 on `/api/upload-image` and `/api/contractors`
-**Root Cause**: Netlify edge cache serving stale 404 responses from before function was properly deployed
-**Fix**: Added cache prevention headers for `/api/*` routes + manual cache purge required
+**Root Cause #1**: Netlify edge cache serving stale 404 responses (RESOLVED)
+**Root Cause #2**: `_redirects` file not being deployed to live site (IN PROGRESS)
+**Current Fix**: Configuring netlify.toml with proper base and publish directories
 
 ### Attempt Log
 
@@ -655,6 +656,28 @@ The cache headers will prevent FUTURE caching issues, but won't clear the EXISTI
 - **Implementation**: Updated `apps/web/package.json` build script to run the fixer automatically and verified locally that the script flips `preferStatic` to `false`
 - **Result**: ✅ Local build artifacts now ship with `preferStatic: false`; ready for deployment to confirm live fix
 - **Next Step**: Trigger fresh Netlify deploy (with cache purge) so the updated function is uploaded
+
+#### Attempt #23 - 2025-10-21 17:08 EST (Configure base and publish directories in netlify.toml)
+- **Action**: Added `base = "apps/web"`, `publish = "dist"` to `[build]` section in netlify.toml
+- **Reasoning**: `_redirects` file exists in git commit `e95399a` but was not being deployed to live site. Local build shows `[@astrojs/netlify] Emitted _redirects` and file exists in `dist/_redirects`, but live site returns 404 for the file. Missing base/publish directory configuration may be causing Netlify to look in wrong directory during deployment.
+- **Investigation Findings**:
+  - ✅ `_redirects` file committed in `e95399a` (82 minutes ago)
+  - ✅ Local build succeeds: `[@astrojs/netlify] Emitted _redirects`
+  - ✅ File exists at `apps/web/dist/_redirects` with correct content
+  - ✅ File exists at `apps/web/public/_redirects` (source)
+  - ❌ Live site returns 404 for `/_redirects` (not deployed)
+  - ❌ API endpoint `/api/upload-image` returns 404 with HTML page
+- **Configuration Changes**:
+  ```toml
+  [build]
+    base = "apps/web"
+    command = "pnpm build"
+    publish = "dist"  # Relative to base
+  ```
+- **Commit**: `a38e2eb`
+- **Files Changed**: `netlify.toml` (added base and publish directories)
+- **Expected Result**: Netlify will deploy from `apps/web/dist/` (including `_redirects` file), routing `/api/*` to SSR function
+- **Status**: DEPLOYING - Pushed to GitHub at 17:08 EST, waiting for Netlify auto-deploy
 
 ---
 
