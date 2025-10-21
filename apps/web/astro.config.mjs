@@ -12,11 +12,8 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  output: 'server',
-  adapter: netlify({
-    edgeMiddleware: false,
-    functionPerRoute: true,
-  }),
+  output: 'hybrid',
+  adapter: netlify(),
   build: {
     inlineStylesheets: 'auto',
   },
