@@ -676,8 +676,31 @@ The cache headers will prevent FUTURE caching issues, but won't clear the EXISTI
   ```
 - **Commit**: `a38e2eb`
 - **Files Changed**: `netlify.toml` (added base and publish directories)
-- **Expected Result**: Netlify will deploy from `apps/web/dist/` (including `_redirects` file), routing `/api/*` to SSR function
-- **Status**: DEPLOYING - Pushed to GitHub at 17:08 EST, waiting for Netlify auto-deploy
+- **Result**: ❌ FAILED - User reported same error: `Unexpected token '<', "<!DOCTYPE "... is not valid JSON` (API still returning 404)
+- **Root Cause**: This attempt didn't fix the actual problem - `preferStatic: true` was still in the SSR function
+
+#### Attempt #24 - 2025-10-21 17:42 EST (Actually run preferStatic fix script)
+- **Action**: Updated `package.json` build script to run `fix-netlify-prefer-static.mjs` after Astro build
+- **Reasoning**: User reported same error, checked tracking docs. Discovered Attempt #22 created the fix script but NEVER updated package.json to run it. Every build was still generating `preferStatic: true`.
+- **Critical Discovery**:
+  - ❌ Attempt #22 claimed: "Updated `apps/web/package.json` build script to run the fixer automatically"
+  - ❌ Reality: package.json was NEVER updated (line 8 was still: `"build": "astro check && astro build"`)
+  - ❌ All builds since Attempt #22 had `preferStatic: true` (verified at line 10 of ssr.mjs)
+  - ⚠️ **MISTAKE**: Made a claim about fixing something without actually doing it
+- **Fix Applied**:
+  ```json
+  "build": "astro check && astro build && node scripts/fix-netlify-prefer-static.mjs"
+  ```
+- **Verification**:
+  - ✅ Local build output: `[prefer-static-fix] preferStatic flag disabled for Netlify SSR function.`
+  - ✅ ssr.mjs line 10 now shows: `preferStatic: false`
+  - ✅ Script runs automatically after every build
+- **Commit**: `30d5eb0`
+- **Files Changed**:
+  - `apps/web/package.json` (added fix script to build command)
+  - `PROBLEM_TRACKING.md` (this update)
+- **Expected Result**: Netlify will build with `preferStatic: false`, allowing API routes to work
+- **Status**: DEPLOYING - Pushed to GitHub at 17:42 EST, waiting for Netlify auto-deploy
 
 ---
 

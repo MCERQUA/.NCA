@@ -56,10 +56,11 @@ export async function getFilteredContractors(filters: ContractorFilters) {
 }
 
 /**
- * Get top rated contractors
+ * Get featured contractors (verified first, then recent)
  */
 export async function getFeaturedContractors(limit = 3) {
-  return await db
+  // Try to get verified contractors first
+  const verified = await db
     .select()
     .from(contractors)
     .where(
@@ -70,6 +71,27 @@ export async function getFeaturedContractors(limit = 3) {
     )
     .orderBy(desc(contractors.rating))
     .limit(limit);
+
+  // If we have enough verified contractors, return them
+  if (verified.length >= limit) {
+    return verified;
+  }
+
+  // Otherwise, get a mix of verified and recent active contractors
+  const remaining = limit - verified.length;
+  const recent = await db
+    .select()
+    .from(contractors)
+    .where(
+      and(
+        eq(contractors.status, 'active'),
+        eq(contractors.verified, false)
+      )
+    )
+    .orderBy(desc(contractors.createdAt))
+    .limit(remaining);
+
+  return [...verified, ...recent];
 }
 
 /**

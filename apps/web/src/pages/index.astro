@@ -19,7 +19,7 @@ let contractorsCount = 0;
 try {
   [allContractors, featuredContractors, contractorsCount] = await Promise.all([
     getAllContractors(),
-    getFeaturedContractors(3),
+    getFeaturedContractors(9),
     getContractorsCount(),
   ]);
 } catch (error) {
