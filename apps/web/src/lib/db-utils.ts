@@ -1,5 +1,5 @@
 import { db, contractors } from '../db';
-import { eq, desc, and, like, or, sql } from 'drizzle-orm';
+import { eq, desc, and, like, or, sql, ne } from 'drizzle-orm';
 
 export interface ContractorFilters {
   category?: string;
@@ -9,21 +9,31 @@ export interface ContractorFilters {
 }
 
 /**
- * Get all active contractors from database
+ * Get all active contractors from database (excludes contractors with unknown addresses)
  */
 export async function getAllContractors() {
   return await db
     .select()
     .from(contractors)
-    .where(eq(contractors.status, 'active'))
+    .where(
+      and(
+        eq(contractors.status, 'active'),
+        ne(contractors.city, 'Unknown'),
+        ne(contractors.state, 'Unknown')
+      )
+    )
     .orderBy(desc(contractors.rating));
 }
 
 /**
- * Get contractors with filters
+ * Get contractors with filters (excludes contractors with unknown addresses)
  */
 export async function getFilteredContractors(filters: ContractorFilters) {
-  const conditions = [eq(contractors.status, 'active')];
+  const conditions = [
+    eq(contractors.status, 'active'),
+    ne(contractors.city, 'Unknown'),
+    ne(contractors.state, 'Unknown')
+  ];
 
   if (filters.category) {
     conditions.push(
@@ -56,7 +66,7 @@ export async function getFilteredContractors(filters: ContractorFilters) {
 }
 
 /**
- * Get featured contractors (verified first, then recent)
+ * Get featured contractors (verified first, then recent) - excludes contractors with unknown addresses
  */
 export async function getFeaturedContractors(limit = 3) {
   // Try to get verified contractors first
@@ -66,7 +76,9 @@ export async function getFeaturedContractors(limit = 3) {
     .where(
       and(
         eq(contractors.status, 'active'),
-        eq(contractors.verified, true)
+        eq(contractors.verified, true),
+        ne(contractors.city, 'Unknown'),
+        ne(contractors.state, 'Unknown')
       )
     )
     .orderBy(desc(contractors.rating))
@@ -85,7 +97,9 @@ export async function getFeaturedContractors(limit = 3) {
     .where(
       and(
         eq(contractors.status, 'active'),
-        eq(contractors.verified, false)
+        eq(contractors.verified, false),
+        ne(contractors.city, 'Unknown'),
+        ne(contractors.state, 'Unknown')
       )
     )
     .orderBy(desc(contractors.createdAt))
@@ -108,13 +122,19 @@ export async function getContractorById(id: string) {
 }
 
 /**
- * Get contractors count
+ * Get contractors count (excludes contractors with unknown addresses)
  */
 export async function getContractorsCount() {
   const result = await db
     .select({ count: sql<number>`count(*)` })
     .from(contractors)
-    .where(eq(contractors.status, 'active'));
+    .where(
+      and(
+        eq(contractors.status, 'active'),
+        ne(contractors.city, 'Unknown'),
+        ne(contractors.state, 'Unknown')
+      )
+    );
 
   return result[0]?.count || 0;
 }
