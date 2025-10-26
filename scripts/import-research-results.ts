@@ -7,6 +7,7 @@ import * as path from 'path';
 import { eq, or } from 'drizzle-orm';
 import axios from 'axios';
 
+// Load environment variables from apps/web/.env
 dotenv.config({ path: './apps/web/.env' });
 
 const connectionString = process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL;
@@ -14,7 +15,14 @@ if (!connectionString) {
   throw new Error('NETLIFY_DATABASE_URL or DATABASE_URL not found');
 }
 
-const GOOGLE_MAPS_API_KEY = process.env.PUBLIC_GOOGLE_MAPS_API_KEY;
+// Try both with and without PUBLIC_ prefix
+const GOOGLE_MAPS_API_KEY = process.env.PUBLIC_GOOGLE_MAPS_API_KEY || process.env.GOOGLE_MAPS_API_KEY;
+
+if (GOOGLE_MAPS_API_KEY) {
+  console.log('✅ Google Maps API key loaded - geocoding enabled');
+} else {
+  console.log('⚠️  Google Maps API key not found - geocoding disabled');
+}
 
 const client = postgres(connectionString);
 const db = drizzle(client, { schema: { contractors } });
