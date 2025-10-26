@@ -1,0 +1,155 @@
+{
+  "totalContractors": 209,
+  "totalBatches": 21,
+  "batchSize": 10,
+  "createdAt": "2025-10-26T02:54:36.694Z",
+  "batches": [
+    {
+      "batchNumber": 1,
+      "contractorCount": 10,
+      "promptFile": "batch-1-prompt.txt",
+      "contractorsFile": "batch-1-contractors.json",
+      "resultsFile": "batch-1-results.json"
+    },
+    {
+      "batchNumber": 2,
+      "contractorCount": 10,
+      "promptFile": "batch-2-prompt.txt",
+      "contractorsFile": "batch-2-contractors.json",
+      "resultsFile": "batch-2-results.json"
+    },
+    {
+      "batchNumber": 3,
+      "contractorCount": 10,
+      "promptFile": "batch-3-prompt.txt",
+      "contractorsFile": "batch-3-contractors.json",
+      "resultsFile": "batch-3-results.json"
+    },
+    {
+      "batchNumber": 4,
+      "contractorCount": 10,
+      "promptFile": "batch-4-prompt.txt",
+      "contractorsFile": "batch-4-contractors.json",
+      "resultsFile": "batch-4-results.json"
+    },
+    {
+      "batchNumber": 5,
+      "contractorCount": 10,
+      "promptFile": "batch-5-prompt.txt",
+      "contractorsFile": "batch-5-contractors.json",
+      "resultsFile": "batch-5-results.json"
+    },
+    {
+      "batchNumber": 6,
+      "contractorCount": 10,
+      "promptFile": "batch-6-prompt.txt",
+      "contractorsFile": "batch-6-contractors.json",
+      "resultsFile": "batch-6-results.json"
+    },
+    {
+      "batchNumber": 7,
+      "contractorCount": 10,
+      "promptFile": "batch-7-prompt.txt",
+      "contractorsFile": "batch-7-contractors.json",
+      "resultsFile": "batch-7-results.json"
+    },
+    {
+      "batchNumber": 8,
+      "contractorCount": 10,
+      "promptFile": "batch-8-prompt.txt",
+      "contractorsFile": "batch-8-contractors.json",
+      "resultsFile": "batch-8-results.json"
+    },
+    {
+      "batchNumber": 9,
+      "contractorCount": 10,
+      "promptFile": "batch-9-prompt.txt",
+      "contractorsFile": "batch-9-contractors.json",
+      "resultsFile": "batch-9-results.json"
+    },
+    {
+      "batchNumber": 10,
+      "contractorCount": 10,
+      "promptFile": "batch-10-prompt.txt",
+      "contractorsFile": "batch-10-contractors.json",
+      "resultsFile": "batch-10-results.json"
+    },
+    {
+      "batchNumber": 11,
+      "contractorCount": 10,
+      "promptFile": "batch-11-prompt.txt",
+      "contractorsFile": "batch-11-contractors.json",
+      "resultsFile": "batch-11-results.json"
+    },
+    {
+      "batchNumber": 12,
+      "contractorCount": 10,
+      "promptFile": "batch-12-prompt.txt",
+      "contractorsFile": "batch-12-contractors.json",
+      "resultsFile": "batch-12-results.json"
+    },
+    {
+      "batchNumber": 13,
+      "contractorCount": 10,
+      "promptFile": "batch-13-prompt.txt",
+      "contractorsFile": "batch-13-contractors.json",
+      "resultsFile": "batch-13-results.json"
+    },
+    {
+      "batchNumber": 14,
+      "contractorCount": 10,
+      "promptFile": "batch-14-prompt.txt",
+      "contractorsFile": "batch-14-contractors.json",
+      "resultsFile": "batch-14-results.json"
+    },
+    {
+      "batchNumber": 15,
+      "contractorCount": 10,
+      "promptFile": "batch-15-prompt.txt",
+      "contractorsFile": "batch-15-contractors.json",
+      "resultsFile": "batch-15-results.json"
+    },
+    {
+      "batchNumber": 16,
+      "contractorCount": 10,
+      "promptFile": "batch-16-prompt.txt",
+      "contractorsFile": "batch-16-contractors.json",
+      "resultsFile": "batch-16-results.json"
+    },
+    {
+      "batchNumber": 17,
+      "contractorCount": 10,
+      "promptFile": "batch-17-prompt.txt",
+      "contractorsFile": "batch-17-contractors.json",
+      "resultsFile": "batch-17-results.json"
+    },
+    {
+      "batchNumber": 18,
+      "contractorCount": 10,
+      "promptFile": "batch-18-prompt.txt",
+      "contractorsFile": "batch-18-contractors.json",
+      "resultsFile": "batch-18-results.json"
+    },
+    {
+      "batchNumber": 19,
+      "contractorCount": 10,
+      "promptFile": "batch-19-prompt.txt",
+      "contractorsFile": "batch-19-contractors.json",
+      "resultsFile": "batch-19-results.json"
+    },
+    {
+      "batchNumber": 20,
+      "contractorCount": 10,
+      "promptFile": "batch-20-prompt.txt",
+      "contractorsFile": "batch-20-contractors.json",
+      "resultsFile": "batch-20-results.json"
+    },
+    {
+      "batchNumber": 21,
+      "contractorCount": 9,
+      "promptFile": "batch-21-prompt.txt",
+      "contractorsFile": "batch-21-contractors.json",
+      "resultsFile": "batch-21-results.json"
+    }
+  ]
+}

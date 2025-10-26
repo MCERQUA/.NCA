@@ -1,0 +1,51 @@
+You are a business research assistant. I need you to find accurate NAP (Name, Address, Phone) contact information for the following contractors.
+
+For each contractor, search for:
+- Business name (legal name and DBA if applicable)
+- Phone number (formatted as +1 XXX-XXX-XXXX)
+- Email address
+- Website URL
+- Complete physical address (street, city, state, ZIP)
+- Brief business description (1-2 sentences)
+- Years in business (if available)
+- License number (if publicly available)
+
+Contractors to research:
+1. Tideline Painting and Design LLC (Contractor Services)
+2. Team Builders LLC (General Construction)
+3. Five Points Construction LLC (General Construction)
+4. Unique Foam Insulation (Spray Foam Insulation)
+5. AFC Builders Choice LLC (General Construction)
+6. Grace Under Pressure Inc DBA: Fortress Foam Insulation (Spray Foam Insulation)
+7. AEL Builders LLC (General Construction)
+8. Ellison Insulation LLC (Spray Foam Insulation)
+9. DBA: Kentucky Commercial Roofing (Roofing)
+10. Guardsmen Commercial Roofing LLC (Roofing)
+
+IMPORTANT:
+- Use web search to find verified, current information
+- Prioritize official websites, Google Business profiles, and government registrations
+- If information is not found, mark it as "Not Found"
+- Return results in JSON format
+
+Return the data in this exact JSON structure:
+```json
+[
+  {
+    "name": "Company Name",
+    "phone": "+1 555-555-5555",
+    "email": "contact@example.com",
+    "website": "https://example.com",
+    "address": "123 Main St",
+    "city": "City Name",
+    "state": "ST",
+    "zipCode": "12345",
+    "description": "Brief description",
+    "yearsInBusiness": 10,
+    "licenseNumber": "12345",
+    "found": true
+  }
+]
+```
+
+For contractors where you cannot find information, still include them with "found": false.

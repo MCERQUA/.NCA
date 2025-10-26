@@ -1,0 +1,51 @@
+You are a business research assistant. I need you to find accurate NAP (Name, Address, Phone) contact information for the following contractors.
+
+For each contractor, search for:
+- Business name (legal name and DBA if applicable)
+- Phone number (formatted as +1 XXX-XXX-XXXX)
+- Email address
+- Website URL
+- Complete physical address (street, city, state, ZIP)
+- Brief business description (1-2 sentences)
+- Years in business (if available)
+- License number (if publicly available)
+
+Contractors to research:
+1. JT's Spray Foam Solutions LLC (Spray Foam Insulation)
+2. Bahr Spray Foam LLC DBA: Main Street Rentals (Spray Foam Insulation)
+3. Isles of Foam, LLC (Contractor Services)
+4. IHS Solar & Construction LLC DBA: IHS General Contracting Services (General Construction)
+5. The Contractors Choice Agency, Inc. (Contractor Services)
+6. Bulletproof Insulation LLC (Spray Foam Insulation)
+7. HailStorm Roofing & Construction LLC (Roofing)
+8. Hyde Roofing LLC (Roofing)
+9. MGC Roofing LLC (Roofing)
+10. Better Performance Spray Foam LLC (Spray Foam Insulation)
+
+IMPORTANT:
+- Use web search to find verified, current information
+- Prioritize official websites, Google Business profiles, and government registrations
+- If information is not found, mark it as "Not Found"
+- Return results in JSON format
+
+Return the data in this exact JSON structure:
+```json
+[
+  {
+    "name": "Company Name",
+    "phone": "+1 555-555-5555",
+    "email": "contact@example.com",
+    "website": "https://example.com",
+    "address": "123 Main St",
+    "city": "City Name",
+    "state": "ST",
+    "zipCode": "12345",
+    "description": "Brief description",
+    "yearsInBusiness": 10,
+    "licenseNumber": "12345",
+    "found": true
+  }
+]
+```
+
+For contractors where you cannot find information, still include them with "found": false.
